@@ -10,6 +10,14 @@
 
 <!-- /automd -->
 
+<p>
+  <a href="https://npmjs.com/package/@rstest/core?activeTab=readme"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>
+  <a href="https://npmcharts.com/compare/@rstest/core?minimal=true"><img src="https://img.shields.io/npm/dm/@rstest/core.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
+  <a href="https://nodejs.org/en/about/previous-releases"><img src="https://img.shields.io/node/v/@rstest/core.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="node version"></a>
+  <a href="https://github.com/web-infra-dev/rstest/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" /></a>
+</p>
+
+
 Opinionated [Rstack](https://rstack.rs/) presets: [Rslint](https://rslint.rs/) flat-config and [Rslib](https://rslib.rs/) library config in one package, with **tree-shakeable subpath exports**.
 
 Aggregates [`@heyq02/rslint-config`](https://github.com/heyq02/rslint-config) and [`@heyq02/rslib-config`](https://github.com/heyq02/rslib-config).
