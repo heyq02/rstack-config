@@ -1,0 +1,76 @@
+name: Bug report
+description: "Something in @heyq02/rstack-config is not working as expected"
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please fill in the sections below so we can reproduce it quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What happened, and what did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Minimal steps or a small repo that triggers the issue.
+      placeholder: |
+        1. Install @heyq02/rstack-config@x.y.z
+        2. Use this rslint.config.ts or rslib.config.ts …
+        3. Run `pnpm run lint`
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Config
+      description: "Relevant rslint.config.ts or rslib.config.ts / heyq02({ … }) options (redact secrets)."
+      render: ts
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: "@heyq02/rstack-config version from package.json / lockfile."
+      placeholder: "0.0.5"
+    validations:
+      required: true
+
+  - type: input
+    id: rslint-version
+    attributes:
+      label: "@rslint/core version"
+      placeholder: "0.9.4"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Node, package manager, OS, and anything else that matters.
+      placeholder: |
+        - Node.js: 22.x
+        - pnpm: 12.x
+        - OS: macOS / Linux
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: CLI output or stack traces (optional).
+      render: shell
+    validations:
+      required: false
