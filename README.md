@@ -1,20 +1,10 @@
 # @heyq02/rstack-config
 
-<!-- automd:badges license codecov bundlephobia -->
-
-[![npm version](https://img.shields.io/npm/v/@heyq02/rstack-config)](https://npmjs.com/package/@heyq02/rstack-config)
-[![npm downloads](https://img.shields.io/npm/dm/@heyq02/rstack-config)](https://npm.chart.dev/@heyq02/rstack-config)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/@heyq02/rstack-config)](https://bundlephobia.com/package/@heyq02/rstack-config)
-[![codecov](https://img.shields.io/codecov/c/gh/heyq02/rstack-config)](https://codecov.io/gh/heyq02/rstack-config)
-[![license](https://img.shields.io/github/license/heyq02/rstack-config)](https://github.com/heyq02/rstack-config/blob/main/LICENSE)
-
-<!-- /automd -->
-
 <p>
-  <a href="https://npmjs.com/package/@rstest/core?activeTab=readme"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>
-  <a href="https://npmcharts.com/compare/@rstest/core?minimal=true"><img src="https://img.shields.io/npm/dm/@rstest/core.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
-  <a href="https://nodejs.org/en/about/previous-releases"><img src="https://img.shields.io/node/v/@rstest/core.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="node version"></a>
-  <a href="https://github.com/web-infra-dev/rstest/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" /></a>
+  <a href="https://npmjs.com/package/@heyq02/rstack-config?activeTab=readme"><img src="https://img.shields.io/npm/v/@heyq02/rstack-config?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>
+  <a href="https://npmcharts.com/compare/@heyq02/rstack-config?minimal=true"><img src="https://img.shields.io/npm/dm/@heyq02/rstack-config.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
+  <a href="https://nodejs.org/en/about/previous-releases"><img src="https://img.shields.io/node/v/@heyq02/rstack-config.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="node version"></a>
+  <a href="https://github.com/heyq02/rstack-config/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" /></a>
 </p>
 
 Opinionated [Rstack](https://rstack.rs/) presets: [Rslint](https://rslint.rs/) flat-config and [Rslib](https://rslib.rs/) library config in one package, with **tree-shakeable subpath exports**.
