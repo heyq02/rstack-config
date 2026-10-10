@@ -1,0 +1,45 @@
+name: Feature request
+description: "Propose an improvement or new option for @heyq02/rstack-config"
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the problem you want to solve and the API / behavior you would like.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What are you trying to do that is awkward or missing today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Ideal heyq02 option, preset change, or rule set. Include examples if possible.
+      placeholder: |
+        heyq02({
+          // new option here
+        })
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Workarounds, other configs, or upstream Rslint features you already tried.
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: "Links, prior art (@sxzz/eslint-config, Oxfmt, etc.), screenshots."
+    validations:
+      required: false
