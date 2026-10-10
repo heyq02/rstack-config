@@ -1,6 +1,6 @@
 {
   "name": "@heyq02/rstack-config",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "Opinionated Rstack presets: Rslint flat-config and Rslib library config, with tree-shakeable subpath exports.",
   "keywords": [
     "flat-config",
