@@ -1,10 +1,10 @@
 # @heyq02/rstack-config
 
 <p>
-  <a href="https://npmjs.com/package/@rstest/core?activeTab=readme"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>
-  <a href="https://npmcharts.com/compare/@rstest/core?minimal=true"><img src="https://img.shields.io/npm/dm/@rstest/core.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
-  <a href="https://nodejs.org/en/about/previous-releases"><img src="https://img.shields.io/node/v/@rstest/core.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="node version"></a>
-  <a href="https://github.com/web-infra-dev/rstest/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" /></a>
+  <a href="https://npmjs.com/package/@heyq02/rstack-config?activeTab=readme"><img src="https://img.shields.io/npm/v/@heyq02/rstack-config?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>
+  <a href="https://npmcharts.com/compare/@heyq02/rstack-config?minimal=true"><img src="https://img.shields.io/npm/dm/@heyq02/rstack-config.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
+  <a href="https://nodejs.org/en/about/previous-releases"><img src="https://img.shields.io/node/v/@heyq02/rstack-config.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="node version"></a>
+  <a href="https://github.com/heyq02/rstack-config/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" /></a>
 </p>
 
 Opinionated [Rstack](https://rstack.rs/) presets: [Rslint](https://rslint.rs/) flat-config and [Rslib](https://rslib.rs/) library config in one package, with **tree-shakeable subpath exports**.
@@ -146,7 +146,7 @@ pnpm run build
 pnpm run lint
 pnpm run typecheck
 pnpm run test
-pnpm run format   # rs fmt
+pnpm run format   # automd + rs fmt
 pnpm run check    # rs check + typecheck
 pnpm release      # changelogen: bump, CHANGELOG.md, tag (then push)
 ```
@@ -155,5 +155,21 @@ Release notes live in [CHANGELOG.md](./CHANGELOG.md). Pushing a `v*` tag runs CI
 
 ## License
 
+<!-- automd:contributors license=MIT author="heyq02" -->
+
 Published under the [MIT](https://github.com/heyq02/rstack-config/blob/main/LICENSE) license.
-Made by [@heyq02](https://github.com/heyq02).
+Made by [@heyq02](https://github.com/heyq02) and [community](https://github.com/heyq02/rstack-config/graphs/contributors) 💛
+<br><br>
+<a href="https://github.com/heyq02/rstack-config/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=heyq02/rstack-config" />
+</a>
+
+<!-- /automd -->
+
+<!-- automd:with-automd -->
+
+---
+
+_🤖 auto updated with [automd](https://automd.unjs.io)_
+
+<!-- /automd -->

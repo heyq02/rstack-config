@@ -45,7 +45,7 @@ This feeds `changelogen` so release notes / `CHANGELOG.md` stay accurate.
 | Script                             | Purpose                              |
 | ---------------------------------- | ------------------------------------ |
 | `pnpm run lint` / `lint:fix`       | `rs lint` / `rs lint --fix`          |
-| `pnpm run format` / `format:check` | `rs fmt`                             |
+| `pnpm run format` / `format:check` | automd + `rs fmt`                    |
 | `pnpm run test` / `test:coverage`  | Rstest via `rs test` (+ V8 coverage) |
 | `pnpm run typecheck`               | `tsc --noEmit`                       |
 | `pnpm run check`                   | `rs check` + typecheck               |

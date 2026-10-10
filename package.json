@@ -42,6 +42,7 @@
     "dist"
   ],
   "scripts": {
+    "automd": "automd",
     "build": "rs lib",
     "changelog": "changelogen",
     "changelog:sync": "changelogen gh release all",
@@ -49,7 +50,7 @@
     "check:package": "pnpm run build",
     "commitlint": "commitlint",
     "dev": "rs lib --watch",
-    "format": "rs fmt",
+    "format": "pnpm automd && rs fmt",
     "format:check": "rs fmt --check",
     "lint": "rs lint .",
     "lint:fix": "rs lint --fix .",
@@ -76,6 +77,7 @@
     "@rslint/core": "^0.9.5",
     "@rstest/coverage-v8": "^0.12.3",
     "@types/node": "^26.1.1",
+    "automd": "^0.4.3",
     "changelogen": "^0.6.2",
     "rstack": "^0.8.3",
     "typescript": "^7.0.2"
