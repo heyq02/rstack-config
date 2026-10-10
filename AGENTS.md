@@ -7,11 +7,10 @@
 - `pnpm run test` - Unit tests via `rs test` (Rstest)
 - `pnpm run test:coverage` - Unit tests with V8 coverage (Codecov upload in CI)
 - `pnpm run lint` - Lint with `rs lint` (Rslint)
-- `pnpm run format` - Update README with automd, then format with `rs fmt`
+- `pnpm run format` - Format with `rs fmt`
 - `pnpm run format:check` - Check formatting with `rs fmt --check`
 - `pnpm run check` - `rs check` (lint + format:check) + typecheck
 - `pnpm run check:package` - `pnpm run build` (publint + attw)
-- `pnpm run automd` - Refresh automd sections in README.md
 - `pnpm run typecheck` - Type-check with `tsc --noEmit`
 - `pnpm run commitlint` - Lint commit message(s) with Conventional Commits
 - `pnpm run changelog` - Generate changelog section (changelogen → stdout / CHANGELOG.md)

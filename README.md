@@ -1,15 +1,5 @@
 # @heyq02/rstack-config
 
-<!-- automd:badges license codecov bundlephobia -->
-
-[![npm version](https://img.shields.io/npm/v/@heyq02/rstack-config)](https://npmjs.com/package/@heyq02/rstack-config)
-[![npm downloads](https://img.shields.io/npm/dm/@heyq02/rstack-config)](https://npm.chart.dev/@heyq02/rstack-config)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/@heyq02/rstack-config)](https://bundlephobia.com/package/@heyq02/rstack-config)
-[![codecov](https://img.shields.io/codecov/c/gh/heyq02/rstack-config)](https://codecov.io/gh/heyq02/rstack-config)
-[![license](https://img.shields.io/github/license/heyq02/rstack-config)](https://github.com/heyq02/rstack-config/blob/main/LICENSE)
-
-<!-- /automd -->
-
 <p>
   <a href="https://npmjs.com/package/@rstest/core?activeTab=readme"><img src="https://img.shields.io/npm/v/@rstest/core?style=flat-square&colorA=564341&colorB=EDED91" alt="npm version" /></a>
   <a href="https://npmcharts.com/compare/@rstest/core?minimal=true"><img src="https://img.shields.io/npm/dm/@rstest/core.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="downloads" /></a>
@@ -156,7 +146,7 @@ pnpm run build
 pnpm run lint
 pnpm run typecheck
 pnpm run test
-pnpm run format   # automd + rs fmt
+pnpm run format   # rs fmt
 pnpm run check    # rs check + typecheck
 pnpm release      # changelogen: bump, CHANGELOG.md, tag (then push)
 ```
@@ -165,21 +155,5 @@ Release notes live in [CHANGELOG.md](./CHANGELOG.md). Pushing a `v*` tag runs CI
 
 ## License
 
-<!-- automd:contributors license=MIT author="heyq02" -->
-
 Published under the [MIT](https://github.com/heyq02/rstack-config/blob/main/LICENSE) license.
-Made by [@heyq02](https://github.com/heyq02) and [community](https://github.com/heyq02/rstack-config/graphs/contributors) 💛
-<br><br>
-<a href="https://github.com/heyq02/rstack-config/graphs/contributors">
-<img src="https://contrib.rocks/image?repo=heyq02/rstack-config" />
-</a>
-
-<!-- /automd -->
-
-<!-- automd:with-automd -->
-
----
-
-_🤖 auto updated with [automd](https://automd.unjs.io)_
-
-<!-- /automd -->
+Made by [@heyq02](https://github.com/heyq02).
