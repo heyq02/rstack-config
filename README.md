@@ -80,7 +80,7 @@ Import only the subpath you need. There is no root barrel export, so a lint-only
 | Subpath                        | Exports                              | Peer (optional) |
 | ------------------------------ | ------------------------------------ | --------------- |
 | `@heyq02/rstack-config/rslint` | `heyq02`, presets, configs, globs, … | `@rslint/core`  |
-| `@heyq02/rstack-config/rslib`  | `lib`, `nodeLib`, attw helpers       | `@rslib/core`   |
+| `@heyq02/rstack-config/rslib`  | `lib`, `nodeLib`                     | `@rslib/core`   |
 
 ## Options
 
@@ -116,17 +116,17 @@ lib({
   inlineDeps: ['lodash', /^@scope\//],
   // Built-in rsbuild-plugin-publint (default: true)
   publint: true,
-  // Built-in @arethetypeswrong/core (default: true, profile: 'esm-only')
+  // Built-in rsbuild-plugin-arethetypeswrong (default: true, ESM-only)
   attw: true,
 });
 ```
 
-| Option       | Default   | Description                                                                                                                                                                                                                                          |
-| ------------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `entry`      | `'index'` | `'index'` bundles `src/index.ts`. `'shallow'` is bundleless `src/*`. `'all'` is bundleless `src/**`. A custom value is passed through to `source.entry`.                                                                                             |
-| `inlineDeps` | `[]`      | Dependencies to bundle instead of externalize. Mapped to `output.autoExternal.exclude`.                                                                                                                                                              |
-| `publint`    | `true`    | `true` enables [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint). `false` disables it. An object is passed to `pluginPublint()`.                                                                                        |
-| `attw`       | `true`    | `true` enables attw with `profile: 'esm-only'`. `false` disables it. `'ci-only'` runs only when `process.env.CI` is set. An object is `{ enabled, profile, level, ignoreRules, ... }`, same shape as [tsdown attw](https://tsdown.dev/options/lint). |
+| Option       | Default   | Description                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `entry`      | `'index'` | `'index'` bundles `src/index.ts`. `'shallow'` is bundleless `src/*`. `'all'` is bundleless `src/**`. A custom value is passed through to `source.entry`.                                                                                                                                                                                                                                                                               |
+| `inlineDeps` | `[]`      | Dependencies to bundle instead of externalize. Mapped to `output.autoExternal.exclude`.                                                                                                                                                                                                                                                                                                                                                |
+| `publint`    | `true`    | `true` enables [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint). `false` disables it. An object is passed to `pluginPublint()`.                                                                                                                                                                                                                                                                          |
+| `attw`       | `true`    | `true` enables [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) with ESM-only defaults (`ignoreResolutions: node10, node16-cjs`). `false` disables it. `'ci-only'` runs only when `process.env.CI` is set. An object is passed to `pluginAreTheTypesWrong()`. Needs the TypeScript JS API (not TypeScript 7); install `typescript@npm:@typescript/typescript6` when using TS 7 / tsgo. |
 
 ## Migration
 

@@ -12,7 +12,7 @@
 - `pnpm run check` - `rs check` (lint + format:check) + typecheck
 - `pnpm run check:package` - `pnpm run build` (publint + attw)
 - `pnpm run automd` - Refresh automd sections in README.md
-- `pnpm run typecheck` - Type-check with `tsc --noEmit`
+- `pnpm run typecheck` - Type-check with `tsc6 --noEmit` (`@typescript/typescript6`)
 - `pnpm run commitlint` - Lint commit message(s) with Conventional Commits
 - `pnpm run changelog` - Generate changelog section (changelogen → stdout / CHANGELOG.md)
 - `pnpm run changelog:sync` - Sync CHANGELOG.md sections to GitHub Releases
@@ -40,7 +40,8 @@
 
 - **Rstack CLI** (`rs`): build (`rs lib`), lint (`rs lint`), format (`rs fmt`), tests (`rs test`), hooks (`rs hooks`)
 - **Rslib**: package build via local `nodeLib({ entry: { 'rslint/index', 'rslib/index' }, publint, attw })`
-- **Package checks**: build-time publint + attw (ESM-only profile)
+- **Package checks**: build-time [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint) + [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) (ESM-only defaults)
+- **TypeScript**: `typescript` resolves to `@typescript/typescript6` so attw can use the JS API; Rslib dts still uses tsgo
 - **Rstest**: unit tests, with V8 coverage from `@rstest/coverage-v8`
 - **Rslint**: lint through `rs lint` using local `src/rslint`
 

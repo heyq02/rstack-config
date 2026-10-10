@@ -1,6 +1,10 @@
-import { expect, test } from 'rstack/test';
-import { PNPM_PACK_ARGS, resolvePnpmBin } from '../src/rslib/attw.ts';
-import { lib, nodeLib } from '../src/rslib/index.ts';
+import { describe, expect, test } from 'rstack/test';
+import {
+  ESM_ONLY_IGNORE_RESOLUTIONS,
+  lib,
+  nodeLib,
+  resolveAttwOptions,
+} from '../src/rslib/index.ts';
 
 function hasPlugin(config: ReturnType<typeof lib>, name: string): boolean {
   return (config.plugins ?? []).some(
@@ -27,7 +31,7 @@ test('lib() returns ESM preset with dts and index entry', () => {
   });
   expect(config.output?.target).toBeUndefined();
   expect(hasPlugin(config, 'plugin-publint')).toBe(true);
-  expect(hasPlugin(config, 'plugin-attw')).toBe(true);
+  expect(hasPlugin(config, 'plugin-arethetypeswrong')).toBe(true);
 });
 
 test('lib() passes through a custom entry', () => {
@@ -67,7 +71,7 @@ test('lib() can disable publint', () => {
   const config = lib({ publint: false });
 
   expect(hasPlugin(config, 'plugin-publint')).toBe(false);
-  expect(hasPlugin(config, 'plugin-attw')).toBe(true);
+  expect(hasPlugin(config, 'plugin-arethetypeswrong')).toBe(true);
 });
 
 test('lib() forwards publint options', () => {
@@ -81,33 +85,10 @@ test('lib() forwards publint options', () => {
   expect(hasPlugin(config, 'plugin-publint')).toBe(true);
 });
 
-test('lib() disables attw when an options object sets enabled to false', () => {
-  const previous = process.env.CI;
-  delete process.env.CI;
-
-  try {
-    expect(
-      hasPlugin(
-        lib({ attw: { enabled: false, profile: 'strict' } }),
-        'plugin-attw',
-      ),
-    ).toBe(false);
-    expect(
-      hasPlugin(lib({ attw: { enabled: 'ci-only' } }), 'plugin-attw'),
-    ).toBe(false);
-  } finally {
-    if (previous === undefined) {
-      delete process.env.CI;
-    } else {
-      process.env.CI = previous;
-    }
-  }
-});
-
 test('lib() can disable attw', () => {
   const config = lib({ attw: false });
 
-  expect(hasPlugin(config, 'plugin-attw')).toBe(false);
+  expect(hasPlugin(config, 'plugin-arethetypeswrong')).toBe(false);
   expect(hasPlugin(config, 'plugin-publint')).toBe(true);
 });
 
@@ -116,10 +97,14 @@ test('lib() supports attw ci-only', () => {
   delete process.env.CI;
 
   try {
-    expect(hasPlugin(lib({ attw: 'ci-only' }), 'plugin-attw')).toBe(false);
+    expect(hasPlugin(lib({ attw: 'ci-only' }), 'plugin-arethetypeswrong')).toBe(
+      false,
+    );
 
     process.env.CI = 'true';
-    expect(hasPlugin(lib({ attw: 'ci-only' }), 'plugin-attw')).toBe(true);
+    expect(hasPlugin(lib({ attw: 'ci-only' }), 'plugin-arethetypeswrong')).toBe(
+      true,
+    );
   } finally {
     if (previous === undefined) {
       delete process.env.CI;
@@ -129,27 +114,25 @@ test('lib() supports attw ci-only', () => {
   }
 });
 
-test('lib() forwards attw options', () => {
+test('lib() forwards attw plugin options', () => {
   const config = lib({
     attw: {
-      profile: 'node16',
-      level: 'warn',
-      ignoreRules: ['false-cjs'],
+      enable: true,
+      areTheTypesWrongOptions: {
+        ignoreRules: ['false-cjs'],
+        ignoreResolutions: ['node10'],
+      },
     },
   });
 
-  expect(hasPlugin(config, 'plugin-attw')).toBe(true);
+  expect(hasPlugin(config, 'plugin-arethetypeswrong')).toBe(true);
 });
 
-test('attw pack ignores lifecycle scripts', () => {
-  expect(PNPM_PACK_ARGS).toContain('--config.ignore-scripts=true');
-  expect(PNPM_PACK_ARGS).toContain('--json');
-});
+test('lib() disables attw when enable is false', () => {
+  const config = lib({ attw: { enable: false } });
 
-test('attw pack resolves pnpm.cmd on Windows', () => {
-  expect(resolvePnpmBin('win32')).toBe('pnpm.cmd');
-  expect(resolvePnpmBin('linux')).toBe('pnpm');
-  expect(resolvePnpmBin('darwin')).toBe('pnpm');
+  // Plugin is still registered; official plugin honors `enable` at runtime.
+  expect(hasPlugin(config, 'plugin-arethetypeswrong')).toBe(true);
 });
 
 test('nodeLib() sets output.target to node', () => {
@@ -164,7 +147,7 @@ test('nodeLib() sets output.target to node', () => {
     },
   ]);
   expect(hasPlugin(config, 'plugin-publint')).toBe(true);
-  expect(hasPlugin(config, 'plugin-attw')).toBe(true);
+  expect(hasPlugin(config, 'plugin-arethetypeswrong')).toBe(true);
 });
 
 test('nodeLib() merges overrides without dropping target', () => {
@@ -172,4 +155,61 @@ test('nodeLib() merges overrides without dropping target', () => {
 
   expect(config.output?.target).toBe('node');
   expect(config.output?.minify).toBe(false);
+});
+
+describe('resolveAttwOptions', () => {
+  test('defaults to ESM-only ignoreResolutions', () => {
+    expect(resolveAttwOptions(true)).toEqual({
+      areTheTypesWrongOptions: {
+        ignoreResolutions: [...ESM_ONLY_IGNORE_RESOLUTIONS],
+      },
+    });
+    expect(resolveAttwOptions()).toEqual(resolveAttwOptions(true));
+  });
+
+  test('returns false when disabled', () => {
+    expect(resolveAttwOptions(false)).toBe(false);
+  });
+
+  test('maps ci-only to enabled only when CI is set', () => {
+    const previous = process.env.CI;
+    delete process.env.CI;
+
+    try {
+      expect(resolveAttwOptions('ci-only')).toBe(false);
+
+      process.env.CI = '1';
+      expect(resolveAttwOptions('ci-only')).toEqual({
+        areTheTypesWrongOptions: {
+          ignoreResolutions: [...ESM_ONLY_IGNORE_RESOLUTIONS],
+        },
+      });
+    } finally {
+      if (previous === undefined) {
+        delete process.env.CI;
+      } else {
+        process.env.CI = previous;
+      }
+    }
+  });
+
+  test('merges object options over ESM-only defaults', () => {
+    expect(
+      resolveAttwOptions({
+        enable: true,
+        areTheTypesWrongOptions: {
+          ignoreRules: ['false-cjs'],
+          ignoreResolutions: ['bundler'],
+          summary: false,
+        },
+      }),
+    ).toEqual({
+      enable: true,
+      areTheTypesWrongOptions: {
+        ignoreResolutions: ['bundler'],
+        ignoreRules: ['false-cjs'],
+        summary: false,
+      },
+    });
+  });
 });

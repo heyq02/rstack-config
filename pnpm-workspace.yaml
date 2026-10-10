@@ -1,6 +1,12 @@
 allowBuilds:
   '@parcel/watcher': true
   simple-git-hooks: true
+# rsbuild-plugin-arethetypeswrong needs the TypeScript JS API (<7).
+# Use the official TS 6 compatibility package for `typescript` resolution.
+# See: https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong/pull/71
+peerDependencyRules:
+  allowedVersions:
+    typescript: '*'
 minimumReleaseAgeExclude:
   - '@rstackjs/cli-darwin-arm64@0.8.3'
   - '@rstackjs/cli-darwin-x64@0.8.3'
