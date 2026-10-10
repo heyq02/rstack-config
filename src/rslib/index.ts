@@ -1,13 +1,27 @@
 import { mergeRslibConfig, type RslibConfig } from '@rslib/core';
 import {
+  pluginAreTheTypesWrong,
+  type PluginAreTheTypesWrongOptions,
+} from 'rsbuild-plugin-arethetypeswrong';
+import {
   pluginPublint,
   type PluginPublintOptions,
 } from 'rsbuild-plugin-publint';
-import { pluginAttw, resolveAttwOptions, type AttwConfig } from './attw.ts';
 
-export type { AttwConfig, AttwOptions, AttwRule } from './attw.ts';
+export type { PluginAreTheTypesWrongOptions } from 'rsbuild-plugin-arethetypeswrong';
+export type { PluginPublintOptions } from 'rsbuild-plugin-publint';
 
 type Entry = NonNullable<NonNullable<RslibConfig['source']>['entry']>;
+
+/**
+ * Convenience wrapper around
+ * [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong).
+ * - omit / `true`: enabled with ESM-only defaults (`ignoreResolutions: node10, node16-cjs`)
+ * - `false`: disabled
+ * - `'ci-only'`: only enabled when `process.env.CI` is set
+ * - object: passed to `pluginAreTheTypesWrong()`, with ESM-only `ignoreResolutions` as default
+ */
+export type AttwConfig = boolean | 'ci-only' | PluginAreTheTypesWrongOptions;
 
 export interface LibOptions {
   /**
@@ -31,15 +45,24 @@ export interface LibOptions {
    */
   publint?: boolean | PluginPublintOptions;
   /**
-   * Built-in [`@arethetypeswrong/core`](https://www.npmjs.com/package/@arethetypeswrong/core).
-   * API aligned with [tsdown attw](https://tsdown.dev/options/lint).
-   * - omit / `true`: enabled with defaults (`profile: 'esm-only'`)
+   * Built-in [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong).
+   * - omit / `true`: enabled with ESM-only defaults
    * - `false`: disabled
    * - `'ci-only'`: only enabled when `process.env.CI` is set
-   * - object: `{ enabled, profile, level, ignoreRules, ... }`
+   * - object: passed to `pluginAreTheTypesWrong()`
    */
   attw?: AttwConfig;
 }
+
+/** Default ignoreResolutions for pure ESM libraries (attw profile ≈ esm-only). */
+export const ESM_ONLY_IGNORE_RESOLUTIONS = [
+  'node10',
+  'node16-cjs',
+] as const satisfies NonNullable<
+  NonNullable<
+    PluginAreTheTypesWrongOptions['areTheTypesWrongOptions']
+  >['ignoreResolutions']
+>;
 
 function resolveEntry(entry: LibOptions['entry'] = 'index'): {
   entry: Entry;
@@ -72,6 +95,38 @@ function resolveEntry(entry: LibOptions['entry'] = 'index'): {
   };
 }
 
+/** Resolve attw convenience values into official plugin options. Exported for tests. */
+export function resolveAttwOptions(
+  attw: AttwConfig = true,
+): PluginAreTheTypesWrongOptions | false {
+  if (attw === false) {
+    return false;
+  }
+
+  const esmOnly = {
+    ignoreResolutions: [...ESM_ONLY_IGNORE_RESOLUTIONS],
+  };
+
+  if (attw === true) {
+    return { areTheTypesWrongOptions: esmOnly };
+  }
+
+  if (attw === 'ci-only') {
+    if (!process.env.CI) {
+      return false;
+    }
+    return { areTheTypesWrongOptions: esmOnly };
+  }
+
+  return {
+    ...attw,
+    areTheTypesWrongOptions: {
+      ...esmOnly,
+      ...attw.areTheTypesWrongOptions,
+    },
+  };
+}
+
 function resolvePlugins(
   publint: LibOptions['publint'] = true,
   attw: LibOptions['attw'] = true,
@@ -84,7 +139,7 @@ function resolvePlugins(
 
   const attwOptions = resolveAttwOptions(attw);
   if (attwOptions !== false) {
-    plugins.push(pluginAttw(attwOptions));
+    plugins.push(pluginAreTheTypesWrong(attwOptions));
   }
 
   return plugins;

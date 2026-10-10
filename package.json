@@ -59,15 +59,15 @@
     "release": "changelogen --release --no-github",
     "test": "rs test",
     "test:coverage": "rs test --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc6 --noEmit"
   },
   "dependencies": {
-    "@arethetypeswrong/core": "^0.18.5",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.8.1",
     "eslint-plugin-de-morgan": "^2.2.0",
     "eslint-plugin-regexp": "^3.3.1",
     "eslint-plugin-unused-imports": "^4.4.1",
     "local-pkg": "^1.2.1",
+    "rsbuild-plugin-arethetypeswrong": "^0.4.0",
     "rsbuild-plugin-publint": "^1.0.0"
   },
   "devDependencies": {
@@ -80,7 +80,7 @@
     "automd": "^0.4.3",
     "changelogen": "^0.6.2",
     "rstack": "^0.8.3",
-    "typescript": "^7.0.2"
+    "typescript": "npm:@typescript/typescript6@^6.0.0"
   },
   "peerDependencies": {
     "@rslib/core": "^1.0.0",

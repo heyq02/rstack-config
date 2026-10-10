@@ -47,7 +47,7 @@ This feeds `changelogen` so release notes / `CHANGELOG.md` stay accurate.
 | `pnpm run lint` / `lint:fix`       | `rs lint` / `rs lint --fix`          |
 | `pnpm run format` / `format:check` | automd + `rs fmt`                    |
 | `pnpm run test` / `test:coverage`  | Rstest via `rs test` (+ V8 coverage) |
-| `pnpm run typecheck`               | `tsc --noEmit`                       |
+| `pnpm run typecheck`               | `tsc6 --noEmit`                      |
 | `pnpm run check`                   | `rs check` + typecheck               |
 | `pnpm run check:package`           | build (incl. publint + attw)         |
 | `pnpm run commitlint`              | lint commit message(s)               |
