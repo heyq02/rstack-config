@@ -1,9 +1,10 @@
 {
   "name": "@heyq02/rstack-config",
   "version": "0.0.1",
-  "description": "Opinionated Rstack presets: Rslint flat-config and Rslib library config, with tree-shakeable subpath exports.",
+  "description": "Opinionated Rstack CLI presets (lint, lib, fmt, test, staged) with tree-shakeable subpath exports and define.extends support.",
   "keywords": [
     "flat-config",
+    "fmt",
     "preset",
     "rsbuild",
     "rslib",
@@ -11,7 +12,9 @@
     "rslint",
     "rslint-config",
     "rstack",
+    "rstack-cli",
     "rstack-config",
+    "staged",
     "tree-shaking",
     "typescript"
   ],
@@ -35,6 +38,22 @@
     "./rslib": {
       "types": "./dist/rslib/index.d.ts",
       "default": "./dist/rslib/index.js"
+    },
+    "./fmt": {
+      "types": "./dist/fmt/index.d.ts",
+      "default": "./dist/fmt/index.js"
+    },
+    "./test": {
+      "types": "./dist/test/index.d.ts",
+      "default": "./dist/test/index.js"
+    },
+    "./staged": {
+      "types": "./dist/staged/index.d.ts",
+      "default": "./dist/staged/index.js"
+    },
+    "./rstack": {
+      "types": "./dist/rstack/index.d.ts",
+      "default": "./dist/rstack/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -84,13 +103,17 @@
   },
   "peerDependencies": {
     "@rslib/core": "^1.0.0",
-    "@rslint/core": "^0.9.0"
+    "@rslint/core": "^0.9.0",
+    "rstack": "^0.8.0"
   },
   "peerDependenciesMeta": {
     "@rslib/core": {
       "optional": true
     },
     "@rslint/core": {
+      "optional": true
+    },
+    "rstack": {
       "optional": true
     }
   },
