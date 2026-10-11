@@ -1,8 +1,8 @@
 import { expect, test } from 'rstack/test';
-import { nodeTest } from '../src/test/index.ts';
+import { test as testPreset } from '../src/test/index.ts';
 
-test('nodeTest() sets node library defaults', () => {
-  const config = nodeTest();
+test('test() sets node library defaults', () => {
+  const config = testPreset();
 
   expect(config.extends).toEqual({});
   expect(config.testEnvironment).toBe('node');
@@ -18,8 +18,8 @@ test('nodeTest() sets node library defaults', () => {
   });
 });
 
-test('nodeTest() can disable strict coverage', () => {
-  expect(nodeTest({ strictCoverage: false }).coverage).not.toHaveProperty(
+test('test() can disable strict coverage', () => {
+  expect(testPreset({ strictCoverage: false }).coverage).not.toHaveProperty(
     'thresholds',
   );
 });

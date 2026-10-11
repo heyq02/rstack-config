@@ -6,11 +6,11 @@ export const jest = (): TypedFlatConfig[] => [
   {
     ...jestPlugin.configs.recommended,
     files: [...GLOB_TESTS],
-    name: 'heyq02/jest/recommended',
+    name: 'rstack/jest/recommended',
   },
   {
     ...jestPlugin.configs.style,
     files: [...GLOB_TESTS],
-    name: 'heyq02/jest/style',
+    name: 'rstack/jest/style',
   },
 ];

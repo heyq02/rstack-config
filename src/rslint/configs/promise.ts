@@ -6,11 +6,11 @@ export const promise = (): TypedFlatConfig[] => [
   {
     ...promisePlugin.configs.recommended,
     files: [GLOB_SRC],
-    name: 'heyq02/promise/recommended',
+    name: 'rstack/promise/recommended',
   },
   {
     files: [GLOB_SRC],
-    name: 'heyq02/promise',
+    name: 'rstack/promise',
     rules: {
       // Modern async/await code rarely benefits from these
       'promise/always-return': 'off',

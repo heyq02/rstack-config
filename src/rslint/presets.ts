@@ -70,7 +70,7 @@ export const presetBasic = (
  * - Special-case overrides
  */
 export const presetAll = (): TypedFlatConfig[] =>
-  heyq02({
+  lint({
     typescript: true,
     react: true,
     jest: true,
@@ -79,20 +79,19 @@ export const presetAll = (): TypedFlatConfig[] =>
   });
 
 /**
- * `@heyq02`'s opinionated Rslint config preset.
+ * Opinionated Rslint flat-config factory for `@heyq02/rstack-config/rslint`.
  *
  * @example
  * ```ts
- * // rslint.config.ts
- * import { heyq02 } from '@heyq02/rslint-config'
+ * import { lint } from '@heyq02/rstack-config/rslint'
  *
- * export default heyq02({
+ * export default lint({
  *   typescript: { typeChecked: true, strict: true },
  *   react: true,
  * })
  * ```
  */
-export function heyq02(
+export function lint(
   options: Options = {},
   ...userConfigs: ResolvableConfig[]
 ): TypedFlatConfig[] {
@@ -189,5 +188,5 @@ export function heyq02(
   return configs;
 }
 
-/** Alias of {@link heyq02}. */
-export const rslintConfig = heyq02;
+/** Alias of {@link lint}. */
+export const rslintConfig = lint;

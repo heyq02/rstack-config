@@ -6,6 +6,6 @@ export const rstest = (): TypedFlatConfig[] => [
   {
     ...rstestPlugin.configs.recommended,
     files: [...GLOB_TESTS],
-    name: 'heyq02/rstest/recommended',
+    name: 'rstack/rstest/recommended',
   },
 ];

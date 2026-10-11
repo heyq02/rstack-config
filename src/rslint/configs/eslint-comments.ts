@@ -9,7 +9,7 @@ import type { TypedFlatConfig } from '../types.ts';
 export const eslintComments = (): TypedFlatConfig[] => [
   {
     files: [GLOB_SRC],
-    name: 'heyq02/eslint-comments',
+    name: 'rstack/eslint-comments',
     plugins: {
       '@eslint-community/eslint-comments': asESLintPlugin(eslintCommentsPlugin),
     },

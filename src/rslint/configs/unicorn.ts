@@ -6,11 +6,11 @@ export const unicorn = (): TypedFlatConfig[] => [
   {
     ...unicornPlugin.configs.recommended,
     files: [GLOB_SRC],
-    name: 'heyq02/unicorn/recommended',
+    name: 'rstack/unicorn/recommended',
   },
   {
     files: [GLOB_SRC],
-    name: 'heyq02/unicorn',
+    name: 'rstack/unicorn',
     rules: {
       'unicorn/filename-case': [
         'error',

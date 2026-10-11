@@ -22,7 +22,7 @@ function hasRule(configs: TypedFlatConfig[], rule: string): boolean {
 }
 
 function projectServiceOf(configs: TypedFlatConfig[]): boolean | undefined {
-  const entry = configs.find((config) => config.name === 'heyq02/typescript');
+  const entry = configs.find((config) => config.name === 'rstack/typescript');
   return entry?.languageOptions?.parserOptions?.projectService;
 }
 
@@ -124,7 +124,7 @@ describe('node', () => {
       const configs = node('mixed');
       expect(configs.map((config) => config.name)).toEqual([
         'upstream/node',
-        'heyq02/node/recommended-1',
+        'rstack/node/recommended-1',
       ]);
     } finally {
       if (original)
@@ -134,7 +134,7 @@ describe('node', () => {
 
   it('uses the script preset', () => {
     expect(node('script').map((config) => config.name)).toEqual([
-      'heyq02/node/recommended-script',
+      'rstack/node/recommended-script',
     ]);
   });
 });
@@ -142,28 +142,28 @@ describe('node', () => {
 describe('react', () => {
   it('includes jsx-a11y unless it is turned off', () => {
     expect(
-      react().some((config) => config.name === 'heyq02/jsx-a11y/recommended'),
+      react().some((config) => config.name === 'rstack/jsx-a11y/recommended'),
     ).toBe(true);
     expect(
       react({ jsxA11y: false }).some(
-        (config) => config.name === 'heyq02/jsx-a11y/recommended',
+        (config) => config.name === 'rstack/jsx-a11y/recommended',
       ),
     ).toBe(false);
-    expect(jsxA11y()[0]?.name).toBe('heyq02/jsx-a11y/recommended');
+    expect(jsxA11y()[0]?.name).toBe('rstack/jsx-a11y/recommended');
   });
 });
 
 describe('jest and rstest', () => {
   it('exposes the Jest recommended and style layers', () => {
     expect(jest().map((config) => config.name)).toEqual([
-      'heyq02/jest/recommended',
-      'heyq02/jest/style',
+      'rstack/jest/recommended',
+      'rstack/jest/style',
     ]);
   });
 
   it('exposes the Rstest recommended layer', () => {
     expect(rstest().map((config) => config.name)).toEqual([
-      'heyq02/rstest/recommended',
+      'rstack/rstest/recommended',
     ]);
   });
 });
@@ -171,7 +171,7 @@ describe('jest and rstest', () => {
 describe('imports', () => {
   it('omits settings when internal patterns produce no regex', () => {
     const sort = imports({ sortImports: { internalPattern: [] } }).find(
-      (config) => config.name === 'heyq02/imports/sort',
+      (config) => config.name === 'rstack/imports/sort',
     );
     expect(sort?.settings).toBeUndefined();
     expect(sort?.rules?.['import/order']).toBeDefined();

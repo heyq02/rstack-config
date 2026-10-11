@@ -11,7 +11,7 @@ export const regexp = (): TypedFlatConfig[] => {
   return [
     {
       files: [GLOB_SRC],
-      name: 'heyq02/regexp',
+      name: 'rstack/regexp',
       plugins: {
         regexp: asESLintPlugin(regexpPlugin),
       },

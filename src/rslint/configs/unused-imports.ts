@@ -29,7 +29,7 @@ export const unusedImports = (
   return [
     {
       files: [GLOB_SRC],
-      name: 'heyq02/unused-imports',
+      name: 'rstack/unused-imports',
       plugins: {
         'unused-imports': asESLintPlugin(unusedImportsPlugin),
       },

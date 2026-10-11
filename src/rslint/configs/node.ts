@@ -8,7 +8,7 @@ export const node = (
   if (preset === 'mixed') {
     return nodePlugin.configs.recommended.map((entry, index) => ({
       ...entry,
-      name: entry.name ?? `heyq02/node/recommended-${index}`,
+      name: entry.name ?? `rstack/node/recommended-${index}`,
     }));
   }
 
@@ -17,7 +17,7 @@ export const node = (
       {
         ...nodePlugin.configs.recommendedScript,
         files: [GLOB_SRC],
-        name: 'heyq02/node/recommended-script',
+        name: 'rstack/node/recommended-script',
       },
     ];
   }
@@ -27,11 +27,11 @@ export const node = (
     {
       ...nodePlugin.configs.recommendedModule,
       files: [GLOB_SRC],
-      name: 'heyq02/node/recommended-module',
+      name: 'rstack/node/recommended-module',
     },
     {
       files: [GLOB_SRC],
-      name: 'heyq02/node',
+      name: 'rstack/node',
       plugins: ['node'],
       rules: {
         'node/handle-callback-err': ['error', '^(err|error)$'],
