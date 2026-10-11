@@ -66,10 +66,10 @@ define.staged(staged());
 
 | Subpath                        | Role                                     | Inspired by             |
 | ------------------------------ | ---------------------------------------- | ----------------------- |
-| `@heyq02/rstack-config/rslint` | `lint()` Rslint flat-config            | `@sxzz/eslint-config`   |
+| `@heyq02/rstack-config/rslint` | `lint()` Rslint flat-config              | `@sxzz/eslint-config`   |
 | `@heyq02/rstack-config/fmt`    | `fmt()` for `rs fmt` / `define.fmt`      | `@sxzz/prettier-config` |
 | `@heyq02/rstack-config/rslib`  | `lib()` / `nodeLib()`                    | `tsdown-preset-sxzz`    |
-| `@heyq02/rstack-config/test`   | `test()` for `rs test`               | Rstack-native           |
+| `@heyq02/rstack-config/test`   | `test()` for `rs test`                   | Rstack-native           |
 | `@heyq02/rstack-config/staged` | `staged()` for `rs staged`               | Rstack-native           |
 | `@heyq02/rstack-config/rstack` | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
 
@@ -83,7 +83,7 @@ There is no root `.` export — pick a subpath.
 | -------- | -------------------------- | ------------------------------- |
 | `lib`    | `{}`                       | `LibOptions` or `false` to omit |
 | `node`   | `true`                     | Use `nodeLib` instead of `lib`  |
-| `lint`   | Node library lint defaults | `lint` options or `false`     |
+| `lint`   | Node library lint defaults | `lint` options or `false`       |
 | `fmt`    | `{}`                       | `fmt()` options or `false`      |
 | `test`   | `{}`                       | `test()` options or `false`     |
 | `staged` | `{}`                       | `staged()` options or `false`   |

@@ -5,13 +5,13 @@ This package ports the sxzz “unified toolchain preset” pattern onto
 
 ## Community references
 
-| sxzz / ecosystem                                                   | Role                               | Rstack CLI equivalent                       |
-| ------------------------------------------------------------------ | ---------------------------------- | ------------------------------------------- |
-| [`@sxzz/eslint-config`](https://github.com/sxzz/eslint-config)     | Lint factory + layered presets     | `@heyq02/rstack-config/rslint` (`lint()`) |
-| [`@sxzz/prettier-config`](https://github.com/sxzz/prettier-config) | Shareable format defaults          | `@heyq02/rstack-config/fmt` (`fmt()`)       |
-| [`tsdown-preset-sxzz`](https://github.com/sxzz/tsdown-preset-sxzz) | `lib()` / `nodeLib()` build preset | `@heyq02/rstack-config/rslib`               |
-| _(Rstack-native)_                                                  | Tests / staged hooks               | `./test` (`test()`), `./staged` (`staged()`)    |
-| _(Rstack-native)_                                                  | One shared config object           | `@heyq02/rstack-config/rstack` (`rstack()`) |
+| sxzz / ecosystem                                                   | Role                               | Rstack CLI equivalent                        |
+| ------------------------------------------------------------------ | ---------------------------------- | -------------------------------------------- |
+| [`@sxzz/eslint-config`](https://github.com/sxzz/eslint-config)     | Lint factory + layered presets     | `@heyq02/rstack-config/rslint` (`lint()`)    |
+| [`@sxzz/prettier-config`](https://github.com/sxzz/prettier-config) | Shareable format defaults          | `@heyq02/rstack-config/fmt` (`fmt()`)        |
+| [`tsdown-preset-sxzz`](https://github.com/sxzz/tsdown-preset-sxzz) | `lib()` / `nodeLib()` build preset | `@heyq02/rstack-config/rslib`                |
+| _(Rstack-native)_                                                  | Tests / staged hooks               | `./test` (`test()`), `./staged` (`staged()`) |
+| _(Rstack-native)_                                                  | One shared config object           | `@heyq02/rstack-config/rstack` (`rstack()`)  |
 
 ## Design principles (from those packages)
 
