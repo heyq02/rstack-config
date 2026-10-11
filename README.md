@@ -7,126 +7,127 @@
   <a href="https://github.com/heyq02/rstack-config/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square&colorA=564341&colorB=EDED91" alt="license" /></a>
 </p>
 
-Opinionated [Rstack](https://rstack.rs/) presets: [Rslint](https://rslint.rs/) flat-config and [Rslib](https://rslib.rs/) library config in one package, with **tree-shakeable subpath exports**.
+Opinionated [Rstack CLI](https://rstack.rs/) presets — the Rstack counterpart of the sxzz toolchain split (`@sxzz/eslint-config` + `@sxzz/prettier-config` + `tsdown-preset-sxzz`), with **tree-shakeable subpaths** and a unified `define.extends` entry.
 
-Aggregates [`@heyq02/rslint-config`](https://github.com/heyq02/rslint-config) and [`@heyq02/rslib-config`](https://github.com/heyq02/rslib-config).
+See [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) for the mapping and design notes.
 
 ## Features
 
-- Separate entry points: `@heyq02/rstack-config/rslint` and `@heyq02/rstack-config/rslib`
-- `sideEffects: false` + distinct ESM bundles so unused configs are dropped by bundlers
-- Optional peers: install only `@rslint/core` and/or `@rslib/core` for the entry you use
-- Same APIs as the previous standalone packages
+- Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged`
+- Unified `rstack()` → `RstackConfig` for `define.extends([...])`
+- `sideEffects: false` + distinct ESM bundles
+- Optional peers: install only the tools you use
+- Lazy factories so `rs lint` does not load the Rslib graph
 
 ## Install
 
 ```bash
-# Lint preset
-pnpm add -D @heyq02/rstack-config @rslint/core
-
-# Library build preset
-pnpm add -D @heyq02/rstack-config @rslib/core
+pnpm add -D @heyq02/rstack-config rstack @rslint/core @rslib/core
 ```
 
 ## Usage
 
-### Rslint — `@heyq02/rstack-config/rslint`
+### Preferred — Rstack CLI shared config
 
 ```ts
-// rslint.config.ts
+// rstack.config.ts
+import { define } from 'rstack';
+import { rstack } from '@heyq02/rstack-config/rstack';
+
+define.extends([
+  rstack({
+    lib: { entry: 'index' },
+    lint: { typescript: true, rstest: true },
+  }),
+]);
+
+// Optional project overrides (merge on top of the shared preset):
+define.fmt({ printWidth: 100 });
+```
+
+### Pick tools (maximum tree-shaking)
+
+```ts
+import { define } from 'rstack';
 import { heyq02 } from '@heyq02/rstack-config/rslint';
+import { nodeLib } from '@heyq02/rstack-config/rslib';
+import { fmt } from '@heyq02/rstack-config/fmt';
+import { nodeTest } from '@heyq02/rstack-config/test';
+import { staged } from '@heyq02/rstack-config/staged';
 
-export default heyq02({
-  typescript: { typeChecked: true, strict: true },
-  react: true,
-  jest: false,
-});
+define.lib(() => nodeLib());
+define.lint(() => heyq02({ typescript: true }));
+define.fmt(fmt());
+define.test(nodeTest());
+define.staged(staged());
 ```
 
-Append project overrides as extra arguments:
+### Community mapping
 
-```ts
-export default heyq02(
-  { typescript: true },
-  {
-    rules: {
-      'no-console': 'off',
-    },
-  },
-);
-```
+| Subpath                        | Role                                     | Inspired by             |
+| ------------------------------ | ---------------------------------------- | ----------------------- |
+| `@heyq02/rstack-config/rslint` | `heyq02()` Rslint flat-config            | `@sxzz/eslint-config`   |
+| `@heyq02/rstack-config/fmt`    | `fmt()` for `rs fmt` / `define.fmt`      | `@sxzz/prettier-config` |
+| `@heyq02/rstack-config/rslib`  | `lib()` / `nodeLib()`                    | `tsdown-preset-sxzz`    |
+| `@heyq02/rstack-config/test`   | `nodeTest()` for `rs test`               | Rstack-native           |
+| `@heyq02/rstack-config/staged` | `staged()` for `rs staged`               | Rstack-native           |
+| `@heyq02/rstack-config/rstack` | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
 
-### Rslib — `@heyq02/rstack-config/rslib`
-
-```ts
-// rslib.config.ts
-import { defineConfig } from '@rslib/core';
-import { lib, nodeLib } from '@heyq02/rstack-config/rslib';
-
-export default defineConfig(lib());
-// export default defineConfig(nodeLib());
-```
-
-Pass a second argument to override any Rslib config:
-
-```ts
-export default defineConfig(nodeLib({ entry: 'all' }, { syntax: 'es2021' }));
-```
-
-### Tree shaking
-
-Import only the subpath you need. There is no root barrel export, so a lint-only consumer never loads the Rslib entry (and vice versa):
-
-| Subpath                        | Exports                              | Peer (optional) |
-| ------------------------------ | ------------------------------------ | --------------- |
-| `@heyq02/rstack-config/rslint` | `heyq02`, presets, configs, globs, … | `@rslint/core`  |
-| `@heyq02/rstack-config/rslib`  | `lib`, `nodeLib`                     | `@rslib/core`   |
+There is no root `.` export — pick a subpath.
 
 ## Options
 
-### Rslint options
+### `rstack()`
 
-| Option           | Default             | Description                                                                                   |
-| ---------------- | ------------------- | --------------------------------------------------------------------------------------------- |
-| `typescript`     | auto (`typescript`) | `true` / `false` / `{ typeChecked, strict, stylistic, projectService }`                       |
-| `javascript`     | `true`              | JavaScript recommended + opinionated rules                                                    |
-| `unicorn`        | `true`              | Unicorn recommended + overrides                                                               |
-| `imports`        | `true`              | Import recommended + no-default-export, etc.                                                  |
-| `sortImports`    | `true`              | `true` / `false` / Oxfmt-like `{ groups, newlinesBetween, customGroups, … }` → `import/order` |
-| `node`           | `true` (`module`)   | `true` / `'module'` / `'script'` / `'mixed'`                                                  |
-| `promise`        | `true`              | Promise recommended (relaxed for async/await)                                                 |
-| `react`          | auto (`react`)      | React + React Hooks (+ jsx-a11y)                                                              |
-| `jsxA11y`        | with react          | JSX accessibility rules                                                                       |
-| `jest`           | auto (`jest`)       | Jest recommended + style                                                                      |
-| `rstest`         | auto (`rstest`)     | Rstest recommended                                                                            |
-| `unusedImports`  | `true`              | `eslint-plugin-unused-imports` (autofix unused imports)                                       |
-| `regexp`         | `true`              | `eslint-plugin-regexp`                                                                        |
-| `deMorgan`       | `true`              | `eslint-plugin-de-morgan`                                                                     |
-| `eslintComments` | `true`              | `@eslint-community/eslint-plugin-eslint-comments`                                             |
-| `isInEditor`     | auto                | Soften unused-import rules in VS Code / JetBrains / Vim                                       |
-| `ignores`        | `[]`                | Extra global ignore patterns                                                                  |
+| Option   | Default                    | Description                     |
+| -------- | -------------------------- | ------------------------------- |
+| `lib`    | `{}`                       | `LibOptions` or `false` to omit |
+| `node`   | `true`                     | Use `nodeLib` instead of `lib`  |
+| `lint`   | Node library lint defaults | `heyq02` options or `false`     |
+| `fmt`    | `{}`                       | `fmt()` options or `false`      |
+| `test`   | `{}`                       | `nodeTest()` options or `false` |
+| `staged` | `{}`                       | `staged()` options or `false`   |
 
-### Rslib options
+### Rslint — `heyq02()`
+
+| Option           | Default             | Description                                                             |
+| ---------------- | ------------------- | ----------------------------------------------------------------------- |
+| `typescript`     | auto (`typescript`) | `true` / `false` / `{ typeChecked, strict, stylistic, projectService }` |
+| `javascript`     | `true`              | JavaScript recommended + opinionated rules                              |
+| `unicorn`        | `true`              | Unicorn recommended + overrides                                         |
+| `imports`        | `true`              | Import recommended + no-default-export, etc.                            |
+| `sortImports`    | `true`              | `true` / `false` / Oxfmt-like options → `import/order`                  |
+| `node`           | `true` (`module`)   | `true` / `'module'` / `'script'` / `'mixed'`                            |
+| `promise`        | `true`              | Promise recommended                                                     |
+| `react`          | auto (`react`)      | React + React Hooks (+ jsx-a11y)                                        |
+| `jest`           | auto (`jest`)       | Jest recommended                                                        |
+| `rstest`         | auto (`rstest`)     | Rstest recommended                                                      |
+| `unusedImports`  | `true`              | `eslint-plugin-unused-imports`                                          |
+| `regexp`         | `true`              | `eslint-plugin-regexp`                                                  |
+| `deMorgan`       | `true`              | `eslint-plugin-de-morgan`                                               |
+| `eslintComments` | `true`              | `@eslint-community/eslint-plugin-eslint-comments`                       |
+| `ignores`        | `[]`                | Extra global ignore patterns                                            |
+
+### Rslib — `lib()` / `nodeLib()`
+
+| Option       | Default   | Description                                                                                                                                                                                                         |
+| ------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `entry`      | `'index'` | `'index'` / `'shallow'` / `'all'` / custom `source.entry`                                                                                                                                                           |
+| `inlineDeps` | `[]`      | Bundle instead of externalize                                                                                                                                                                                       |
+| `publint`    | `true`    | [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint)                                                                                                                                      |
+| `attw`       | `true`    | [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) with ESM-only defaults. Needs TypeScript JS API (`typescript@npm:@typescript/typescript6` when using TS 7 / tsgo). |
+
+### fmt / test / staged
 
 ```ts
-lib({
-  // 'index' | 'shallow' | 'all' | custom source.entry
-  entry: 'index',
-  // Bundle these deps instead of externalizing them
-  inlineDeps: ['lodash', /^@scope\//],
-  // Built-in rsbuild-plugin-publint (default: true)
-  publint: true,
-  // Built-in rsbuild-plugin-arethetypeswrong (default: true, ESM-only)
-  attw: true,
+fmt({
+  singleQuote: true,
+  sortPackageJson: true,
+  ignorePatterns: ['.github/**'],
 });
+nodeTest({ strictCoverage: true });
+staged({ formatAll: true, lintFix: true });
 ```
-
-| Option       | Default   | Description                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ------------ | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `entry`      | `'index'` | `'index'` bundles `src/index.ts`. `'shallow'` is bundleless `src/*`. `'all'` is bundleless `src/**`. A custom value is passed through to `source.entry`.                                                                                                                                                                                                                                                                               |
-| `inlineDeps` | `[]`      | Dependencies to bundle instead of externalize. Mapped to `output.autoExternal.exclude`.                                                                                                                                                                                                                                                                                                                                                |
-| `publint`    | `true`    | `true` enables [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint). `false` disables it. An object is passed to `pluginPublint()`.                                                                                                                                                                                                                                                                          |
-| `attw`       | `true`    | `true` enables [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) with ESM-only defaults (`ignoreResolutions: node10, node16-cjs`). `false` disables it. `'ci-only'` runs only when `process.env.CI` is set. An object is passed to `pluginAreTheTypesWrong()`. Needs the TypeScript JS API (not TypeScript 7); install `typescript@npm:@typescript/typescript6` when using TS 7 / tsgo. |
 
 ## Migration
 
@@ -136,6 +137,9 @@ lib({
 
 - import { lib, nodeLib } from '@heyq02/rslib-config';
 + import { lib, nodeLib } from '@heyq02/rstack-config/rslib';
+
++ import { rstack } from '@heyq02/rstack-config/rstack';
++ define.extends([rstack()]);
 ```
 
 ## Development
@@ -150,8 +154,6 @@ pnpm run format   # automd + rs fmt
 pnpm run check    # rs check + typecheck
 pnpm release      # changelogen: bump, CHANGELOG.md, tag (then push)
 ```
-
-Release notes live in [CHANGELOG.md](./CHANGELOG.md). Pushing a `v*` tag runs CI (`changelogithub` + npm publish). Sync existing tags with `pnpm run changelog:sync`.
 
 ## License
 

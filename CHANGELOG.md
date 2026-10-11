@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### 🚀 Enhancements
+
+- Add Rstack CLI presets aligned with the sxzz toolchain split: `./fmt`, `./test`, `./staged`, and unified `./rstack` for `define.extends`
+- Self-host via `define.extends([rstack(...)])`
+
 ### 🏡 Chore
 
 - Use official [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) instead of a custom attw plugin

@@ -29,10 +29,15 @@
 
 ## Package layout
 
-- `src/rslint/` — former `@heyq02/rslint-config` (export `@heyq02/rstack-config/rslint`)
-- `src/rslib/` — former `@heyq02/rslib-config` (export `@heyq02/rstack-config/rslib`)
-- Build emits separate ESM bundles under `dist/rslint/` and `dist/rslib/` for tree shaking
+- `src/rslint/` — lint factory (sxzz eslint-config analogue) → `./rslint`
+- `src/rslib/` — lib/nodeLib (tsdown-preset-sxzz analogue) → `./rslib`
+- `src/fmt/` — `rs fmt` defaults (sxzz prettier-config analogue) → `./fmt`
+- `src/test/` — `nodeTest()` → `./test`
+- `src/staged/` — `staged()` → `./staged`
+- `src/rstack/` — unified `rstack()` for `define.extends` → `./rstack`
+- `docs/ARCHITECTURE.md` — design notes and community mapping
 - No root `.` export — consumers must pick a subpath
+- Self-host: `rstack.config.ts` uses `define.extends([rstack(...)])`
 
 ## Tools
 
