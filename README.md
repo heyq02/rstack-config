@@ -49,16 +49,16 @@ define.fmt({ printWidth: 100 });
 
 ```ts
 import { define } from 'rstack';
-import { heyq02 } from '@heyq02/rstack-config/rslint';
+import { lint } from '@heyq02/rstack-config/rslint';
 import { nodeLib } from '@heyq02/rstack-config/rslib';
 import { fmt } from '@heyq02/rstack-config/fmt';
-import { nodeTest } from '@heyq02/rstack-config/test';
+import { test } from '@heyq02/rstack-config/test';
 import { staged } from '@heyq02/rstack-config/staged';
 
 define.lib(() => nodeLib());
-define.lint(() => heyq02({ typescript: true }));
+define.lint(() => lint({ typescript: true }));
 define.fmt(fmt());
-define.test(nodeTest());
+define.test(test());
 define.staged(staged());
 ```
 
@@ -66,10 +66,10 @@ define.staged(staged());
 
 | Subpath                        | Role                                     | Inspired by             |
 | ------------------------------ | ---------------------------------------- | ----------------------- |
-| `@heyq02/rstack-config/rslint` | `heyq02()` Rslint flat-config            | `@sxzz/eslint-config`   |
+| `@heyq02/rstack-config/rslint` | `lint()` Rslint flat-config              | `@sxzz/eslint-config`   |
 | `@heyq02/rstack-config/fmt`    | `fmt()` for `rs fmt` / `define.fmt`      | `@sxzz/prettier-config` |
 | `@heyq02/rstack-config/rslib`  | `lib()` / `nodeLib()`                    | `tsdown-preset-sxzz`    |
-| `@heyq02/rstack-config/test`   | `nodeTest()` for `rs test`               | Rstack-native           |
+| `@heyq02/rstack-config/test`   | `test()` for `rs test`                   | Rstack-native           |
 | `@heyq02/rstack-config/staged` | `staged()` for `rs staged`               | Rstack-native           |
 | `@heyq02/rstack-config/rstack` | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
 
@@ -83,12 +83,12 @@ There is no root `.` export — pick a subpath.
 | -------- | -------------------------- | ------------------------------- |
 | `lib`    | `{}`                       | `LibOptions` or `false` to omit |
 | `node`   | `true`                     | Use `nodeLib` instead of `lib`  |
-| `lint`   | Node library lint defaults | `heyq02` options or `false`     |
+| `lint`   | Node library lint defaults | `lint` options or `false`       |
 | `fmt`    | `{}`                       | `fmt()` options or `false`      |
-| `test`   | `{}`                       | `nodeTest()` options or `false` |
+| `test`   | `{}`                       | `test()` options or `false`     |
 | `staged` | `{}`                       | `staged()` options or `false`   |
 
-### Rslint — `heyq02()`
+### Rslint — `lint()`
 
 | Option           | Default             | Description                                                             |
 | ---------------- | ------------------- | ----------------------------------------------------------------------- |
@@ -125,7 +125,7 @@ fmt({
   sortPackageJson: true,
   ignorePatterns: ['.github/**'],
 });
-nodeTest({ strictCoverage: true });
+test({ strictCoverage: true });
 staged({ formatAll: true, lintFix: true });
 ```
 
@@ -133,7 +133,7 @@ staged({ formatAll: true, lintFix: true });
 
 ```diff
 - import { heyq02 } from '@heyq02/rslint-config';
-+ import { heyq02 } from '@heyq02/rstack-config/rslint';
++ import { lint } from '@heyq02/rstack-config/rslint';
 
 - import { lib, nodeLib } from '@heyq02/rslib-config';
 + import { lib, nodeLib } from '@heyq02/rstack-config/rslib';

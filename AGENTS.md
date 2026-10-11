@@ -32,7 +32,7 @@
 - `src/rslint/` — lint factory (sxzz eslint-config analogue) → `./rslint`
 - `src/rslib/` — lib/nodeLib (tsdown-preset-sxzz analogue) → `./rslib`
 - `src/fmt/` — `rs fmt` defaults (sxzz prettier-config analogue) → `./fmt`
-- `src/test/` — `nodeTest()` → `./test`
+- `src/test/` — `test()` → `./test`
 - `src/staged/` — `staged()` → `./staged`
 - `src/rstack/` — unified `rstack()` for `define.extends` → `./rstack`
 - `docs/ARCHITECTURE.md` — design notes and community mapping

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'rstack/test';
 import {
-  heyq02,
+  lint,
   presetAll,
   presetBasic,
   presetJavaScript,
@@ -11,10 +11,10 @@ function names(configs: { name?: string }[]): string[] {
   return configs.map((c) => c.name).filter((n): n is string => Boolean(n));
 }
 
-describe('heyq02', () => {
+describe('lint', () => {
   it('includes core layers when features are forced on', () => {
     const configNames = names(
-      heyq02({
+      lint({
         typescript: true,
         react: false,
         jest: false,
@@ -26,18 +26,18 @@ describe('heyq02', () => {
       }),
     );
 
-    expect(configNames).toContain('heyq02/js');
-    expect(configNames).toContain('heyq02/imports');
-    expect(configNames).toContain('heyq02/imports/sort');
-    expect(configNames).toContain('heyq02/unused-imports');
-    expect(configNames).toContain('heyq02/regexp');
-    expect(configNames).toContain('heyq02/de-morgan');
-    expect(configNames).toContain('heyq02/eslint-comments');
-    expect(configNames).toContain('heyq02/special/cli');
+    expect(configNames).toContain('rstack/js');
+    expect(configNames).toContain('rstack/imports');
+    expect(configNames).toContain('rstack/imports/sort');
+    expect(configNames).toContain('rstack/unused-imports');
+    expect(configNames).toContain('rstack/regexp');
+    expect(configNames).toContain('rstack/de-morgan');
+    expect(configNames).toContain('rstack/eslint-comments');
+    expect(configNames).toContain('rstack/special/cli');
   });
 
   it('honors feature toggles and appends user configs', () => {
-    const configs = heyq02(
+    const configs = lint(
       {
         typescript: false,
         javascript: true,
@@ -57,16 +57,16 @@ describe('heyq02', () => {
     );
 
     const configNames = names(configs);
-    expect(configNames).toContain('heyq02/js');
-    expect(configNames).not.toContain('heyq02/imports');
-    expect(configNames).not.toContain('heyq02/imports/sort');
-    expect(configNames).not.toContain('heyq02/unused-imports');
+    expect(configNames).toContain('rstack/js');
+    expect(configNames).not.toContain('rstack/imports');
+    expect(configNames).not.toContain('rstack/imports/sort');
+    expect(configNames).not.toContain('rstack/unused-imports');
     expect(configNames).toContain('user/override');
   });
 
   it('disables import sorting when sortImports is false', () => {
     const configNames = names(
-      heyq02({
+      lint({
         typescript: false,
         react: false,
         jest: false,
@@ -83,12 +83,12 @@ describe('heyq02', () => {
       }),
     );
 
-    expect(configNames).toContain('heyq02/imports');
-    expect(configNames).not.toContain('heyq02/imports/sort');
+    expect(configNames).toContain('rstack/imports');
+    expect(configNames).not.toContain('rstack/imports/sort');
   });
 
   it('can turn JavaScript off and pass TypeScript, Node, and React options through', () => {
-    const configs = heyq02({
+    const configs = lint({
       javascript: false,
       typescript: {
         typeChecked: true,
@@ -111,16 +111,16 @@ describe('heyq02', () => {
     });
     const configNames = names(configs);
 
-    expect(configNames).not.toContain('heyq02/js');
-    expect(configNames).toContain('heyq02/typescript');
-    expect(configNames).toContain('heyq02/node/recommended-script');
-    expect(configNames).toContain('heyq02/react/recommended');
-    expect(configNames).not.toContain('heyq02/jsx-a11y/recommended');
-    expect(configNames).toContain('heyq02/jest/recommended');
-    expect(configNames).toContain('heyq02/rstest/recommended');
+    expect(configNames).not.toContain('rstack/js');
+    expect(configNames).toContain('rstack/typescript');
+    expect(configNames).toContain('rstack/node/recommended-script');
+    expect(configNames).toContain('rstack/react/recommended');
+    expect(configNames).not.toContain('rstack/jsx-a11y/recommended');
+    expect(configNames).toContain('rstack/jest/recommended');
+    expect(configNames).toContain('rstack/rstest/recommended');
 
     const typescriptEntry = configs.find(
-      (config) => config.name === 'heyq02/typescript',
+      (config) => config.name === 'rstack/typescript',
     );
     expect(
       typescriptEntry?.languageOptions?.parserOptions?.projectService,
@@ -129,17 +129,17 @@ describe('heyq02', () => {
 
   it('enables jsx-a11y with React by default and without React when asked', () => {
     const withReact = names(
-      heyq02({
+      lint({
         typescript: false,
         jest: false,
         rstest: false,
         react: true,
       }),
     );
-    expect(withReact).toContain('heyq02/jsx-a11y/recommended');
+    expect(withReact).toContain('rstack/jsx-a11y/recommended');
 
     const a11yOnly = names(
-      heyq02({
+      lint({
         typescript: false,
         javascript: false,
         unicorn: false,
@@ -156,15 +156,15 @@ describe('heyq02', () => {
         eslintComments: false,
       }),
     );
-    expect(a11yOnly).toContain('heyq02/jsx-a11y/recommended');
-    expect(a11yOnly).not.toContain('heyq02/react/recommended');
+    expect(a11yOnly).toContain('rstack/jsx-a11y/recommended');
+    expect(a11yOnly).not.toContain('rstack/react/recommended');
     expect(
-      a11yOnly.some((name) => name.startsWith('heyq02/node/recommended-')),
+      a11yOnly.some((name) => name.startsWith('rstack/node/recommended-')),
     ).toBe(true);
   });
 
   it('softens unused-import rules when isInEditor is true', () => {
-    const entry = heyq02({
+    const entry = lint({
       typescript: false,
       react: false,
       jest: false,
@@ -178,7 +178,7 @@ describe('heyq02', () => {
       eslintComments: false,
       unusedImports: true,
       isInEditor: true,
-    }).find((c) => c.name === 'heyq02/unused-imports');
+    }).find((c) => c.name === 'rstack/unused-imports');
 
     expect(entry?.rules?.['unused-imports/no-unused-imports']).toBe('off');
     expect(entry?.rules?.['unused-imports/no-unused-vars']).toBe('off');
@@ -188,22 +188,22 @@ describe('heyq02', () => {
 describe('presets', () => {
   it('presetJavaScript exposes the JS baseline names', () => {
     const configNames = names(presetJavaScript());
-    expect(configNames).toContain('heyq02/js');
-    expect(configNames).toContain('heyq02/imports');
-    expect(configNames).not.toContain('heyq02/typescript');
+    expect(configNames).toContain('rstack/js');
+    expect(configNames).toContain('rstack/imports');
+    expect(configNames).not.toContain('rstack/typescript');
   });
 
   it('presetBasic layers TypeScript configs', () => {
     const configNames = names(presetBasic(true));
     expect(configNames.some((n) => n.includes('typescript'))).toBe(true);
-    expect(configNames).toContain('heyq02/imports/sort');
+    expect(configNames).toContain('rstack/imports/sort');
   });
 
   it('presetBasic forwards TypeScript option objects', () => {
     const typescriptEntry = presetBasic({
       typeChecked: true,
       projectService: true,
-    }).find((config) => config.name === 'heyq02/typescript');
+    }).find((config) => config.name === 'rstack/typescript');
     expect(
       typescriptEntry?.languageOptions?.parserOptions?.projectService,
     ).toBe(true);
@@ -211,14 +211,14 @@ describe('presets', () => {
 
   it('presetAll forces React, Jest, Rstest, and jsx-a11y on', () => {
     const configNames = names(presetAll());
-    expect(configNames).toContain('heyq02/react/recommended');
-    expect(configNames).toContain('heyq02/react-hooks/recommended');
-    expect(configNames).toContain('heyq02/jsx-a11y/recommended');
-    expect(configNames).toContain('heyq02/jest/style');
-    expect(configNames).toContain('heyq02/rstest/recommended');
+    expect(configNames).toContain('rstack/react/recommended');
+    expect(configNames).toContain('rstack/react-hooks/recommended');
+    expect(configNames).toContain('rstack/jsx-a11y/recommended');
+    expect(configNames).toContain('rstack/jest/style');
+    expect(configNames).toContain('rstack/rstest/recommended');
   });
 
-  it('rslintConfig aliases heyq02', () => {
-    expect(rslintConfig).toBe(heyq02);
+  it('rslintConfig aliases lint', () => {
+    expect(rslintConfig).toBe(lint);
   });
 });

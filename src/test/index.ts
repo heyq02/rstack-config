@@ -24,7 +24,7 @@ export interface TestOptions {
   [key: string]: unknown;
 }
 
-export interface NodeTestOptions extends TestOptions {
+export interface TestPresetOptions extends TestOptions {
   /**
    * Enforce 100% coverage thresholds (statements/branches/functions/lines).
    * @default true
@@ -36,14 +36,14 @@ export interface NodeTestOptions extends TestOptions {
  * Opinionated Rstest preset for Node library packages.
  * Sets `extends: {}` so tests stay independent of the Rslib adapter.
  */
-export function nodeTest({
+export function test({
   extends: extendsConfig = {},
   testEnvironment = 'node',
   include = ['tests/**/*.test.ts'],
   strictCoverage = true,
   coverage,
   ...rest
-}: NodeTestOptions = {}): TestOptions {
+}: TestPresetOptions = {}): TestOptions {
   const defaultCoverage = {
     provider: 'v8' as const,
     reporters: ['text', 'json', 'html', 'lcov'],

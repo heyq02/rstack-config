@@ -45,7 +45,7 @@ export const typescript = (
     ...stylistic,
     {
       files: [GLOB_TS, GLOB_TSX],
-      name: 'heyq02/typescript',
+      name: 'rstack/typescript',
       ...(enableProjectService === undefined
         ? {}
         : {
@@ -107,7 +107,7 @@ export const typescript = (
     },
     {
       files: ['**/*.d.ts'],
-      name: 'heyq02/typescript/dts-rules',
+      name: 'rstack/typescript/dts-rules',
       rules: {
         'import/no-duplicates': 'off',
         'no-restricted-syntax': 'off',
@@ -115,7 +115,7 @@ export const typescript = (
     },
     {
       files: [GLOB_JS, '**/*.cjs'],
-      name: 'heyq02/typescript/cjs-rules',
+      name: 'rstack/typescript/cjs-rules',
       rules: {
         '@typescript-eslint/no-require-imports': 'off',
       },

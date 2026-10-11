@@ -10,7 +10,7 @@ export const restrictedSyntaxJs: string[] = [
 export const javascript = (): TypedFlatConfig[] => [
   {
     ...js.configs.recommended,
-    name: 'heyq02/js/recommended',
+    name: 'rstack/js/recommended',
   },
   {
     files: [GLOB_SRC],
@@ -23,7 +23,7 @@ export const javascript = (): TypedFlatConfig[] => [
       },
       sourceType: 'module',
     },
-    name: 'heyq02/js',
+    name: 'rstack/js',
     rules: {
       'array-callback-return': 'error',
       'block-scoped-var': 'error',

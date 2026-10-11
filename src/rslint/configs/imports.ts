@@ -19,11 +19,11 @@ export const imports = (options: ImportsOptions = {}): TypedFlatConfig[] => {
     {
       ...importPlugin.configs.recommended,
       files: [GLOB_SRC],
-      name: 'heyq02/imports/recommended',
+      name: 'rstack/imports/recommended',
     },
     {
       files: [GLOB_SRC],
-      name: 'heyq02/imports',
+      name: 'rstack/imports',
       rules: {
         'import/first': 'error',
         'import/no-default-export': 'error',
@@ -47,7 +47,7 @@ export const imports = (options: ImportsOptions = {}): TypedFlatConfig[] => {
     const { rule, settings } = resolveSortImports(sortImportsOption);
     configs.push({
       files: [GLOB_SRC],
-      name: 'heyq02/imports/sort',
+      name: 'rstack/imports/sort',
       ...(Object.keys(settings).length > 0 ? { settings } : {}),
       rules: {
         'import/order': ['error', rule],

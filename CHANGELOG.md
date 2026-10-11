@@ -6,6 +6,7 @@
 
 - Add Rstack CLI presets aligned with the sxzz toolchain split: `./fmt`, `./test`, `./staged`, and unified `./rstack` for `define.extends`
 - Self-host via `define.extends([rstack(...)])`
+- Unify public factory names: `lint` / `fmt` / `lib` / `nodeLib` / `test` / `staged` / `rstack` (rename `heyq02` → `lint`, `nodeTest` → `test`; flat-config names use `rstack/` prefix)
 
 ### 🏡 Chore
 

@@ -59,6 +59,10 @@ This feeds `changelogen` so release notes / `CHANGELOG.md` stay accurate.
 
 ## Package layout
 
-- `src/rslint/` → publish export `@heyq02/rstack-config/rslint`
-- `src/rslib/` → publish export `@heyq02/rstack-config/rslib`
-- Keep the two areas independent so each subpath stays tree-shakeable.
+- `src/rslint/` → `@heyq02/rstack-config/rslint` (`lint()`)
+- `src/rslib/` → `@heyq02/rstack-config/rslib` (`lib()` / `nodeLib()`)
+- `src/fmt/` → `@heyq02/rstack-config/fmt` (`fmt()`)
+- `src/test/` → `@heyq02/rstack-config/test` (`test()`)
+- `src/staged/` → `@heyq02/rstack-config/staged` (`staged()`)
+- `src/rstack/` → `@heyq02/rstack-config/rstack` (`rstack()`)
+- Keep subpaths independent so each export stays tree-shakeable.

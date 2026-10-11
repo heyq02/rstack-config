@@ -3,7 +3,7 @@ import type { FmtOptions } from '../fmt/index.ts';
 import type { LibOptions } from '../rslib/index.ts';
 import type { Options as LintOptions } from '../rslint/types.ts';
 import { staged as stagedPreset, type StagedOptions } from '../staged/index.ts';
-import { nodeTest, type NodeTestOptions } from '../test/index.ts';
+import { test as testPreset, type TestPresetOptions } from '../test/index.ts';
 
 export interface RstackPresetOptions {
   /** Options for `define.lib()` via `@heyq02/rstack-config/rslib`. */
@@ -15,7 +15,7 @@ export interface RstackPresetOptions {
   /** Options for `define.fmt()`. */
   fmt?: FmtOptions | false;
   /** Options for `define.test()`. */
-  test?: NodeTestOptions | false;
+  test?: TestPresetOptions | false;
   /** Options for `define.staged()`. */
   staged?: StagedOptions | false;
 }
@@ -68,8 +68,8 @@ export function rstack({
 
   if (lintOptions !== false) {
     config.lint = async () => {
-      const { heyq02 } = await import('../rslint/index.ts');
-      return heyq02(lintOptions);
+      const { lint } = await import('../rslint/index.ts');
+      return lint(lintOptions);
     };
   }
 
@@ -82,7 +82,7 @@ export function rstack({
 
   if (testOptions !== false) {
     // Structural TestOptions matches RstestConfig at runtime; cast for dts.
-    config.test = nodeTest(testOptions) as RstackConfig['test'];
+    config.test = testPreset(testOptions) as RstackConfig['test'];
   }
 
   if (stagedOptions !== false) {

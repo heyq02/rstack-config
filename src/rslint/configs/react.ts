@@ -8,7 +8,7 @@ export const jsxA11y = (): TypedFlatConfig[] => [
   {
     ...jsxA11yPlugin.configs.recommended,
     files: reactFiles,
-    name: 'heyq02/jsx-a11y/recommended',
+    name: 'rstack/jsx-a11y/recommended',
   },
 ];
 
@@ -19,12 +19,12 @@ export const react = (
     {
       ...reactPlugin.configs.recommended,
       files: reactFiles,
-      name: 'heyq02/react/recommended',
+      name: 'rstack/react/recommended',
     },
     {
       ...reactHooksPlugin.configs.recommended,
       files: reactFiles,
-      name: 'heyq02/react-hooks/recommended',
+      name: 'rstack/react-hooks/recommended',
     },
   ];
 

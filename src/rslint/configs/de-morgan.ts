@@ -9,7 +9,7 @@ import type { TypedFlatConfig } from '../types.ts';
 export const deMorgan = (): TypedFlatConfig[] => [
   {
     files: [GLOB_SRC],
-    name: 'heyq02/de-morgan',
+    name: 'rstack/de-morgan',
     plugins: {
       'de-morgan': asESLintPlugin(deMorganPlugin),
     },
