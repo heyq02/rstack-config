@@ -1,6 +1,6 @@
 {
   "name": "@heyq02/rstack-config",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Opinionated Rstack CLI presets (lint, lib, fmt, test, staged) with tree-shakeable subpath exports and define.extends support.",
   "keywords": [
     "flat-config",
