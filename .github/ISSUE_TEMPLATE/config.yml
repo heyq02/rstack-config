@@ -1,5 +1,0 @@
-blank_issues_enabled: true
-contact_links:
-  - name: Rslint documentation
-    url: https://rslint.rs/
-    about: Questions about Rslint itself belong in the Rslint docs / upstream issues.
