@@ -35,7 +35,7 @@
 - `src/test/` — `test()` → `./test`
 - `src/staged/` — `staged()` → `./staged`
 - `src/rstack/` — unified `rstack()` for `define.extends` → `./rstack`
-- `docs/ARCHITECTURE.md` — design notes and community mapping
+- `ARCHITECTURE.md` — design notes and community mapping
 - No root `.` export — consumers must pick a subpath
 - Self-host: `rstack.config.ts` uses `define.extends([rstack(...)])`
 
