@@ -37,5 +37,8 @@ describe('package exports', () => {
     expect(pkg.peerDependenciesMeta?.['@rslint/core']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.['@rslib/core']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.rstack?.optional).toBe(true);
+    expect(
+      pkg.peerDependenciesMeta?.['@rsdoctor/rspack-plugin']?.optional,
+    ).toBe(true);
   });
 });

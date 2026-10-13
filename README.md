@@ -169,12 +169,36 @@ There is no root `.` export — pick a subpath.
 
 ### Rslib — `lib()` / `nodeLib()`
 
-| Option       | Default   | Description                                                                                                                                                                                                         |
-| ------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `entry`      | `'index'` | `'index'` / `'shallow'` / `'all'` / custom `source.entry`                                                                                                                                                           |
-| `inlineDeps` | `[]`      | Bundle instead of externalize                                                                                                                                                                                       |
-| `publint`    | `true`    | [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint)                                                                                                                                      |
-| `attw`       | `true`    | [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) with ESM-only defaults. Needs TypeScript JS API (`typescript@npm:@typescript/typescript6` when using TS 7 / tsgo). |
+| Option       | Default   | Description                                                                                                                                                                                                                                                   |
+| ------------ | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `entry`      | `'index'` | `'index'` / `'shallow'` / `'all'` / custom `source.entry`                                                                                                                                                                                                     |
+| `inlineDeps` | `[]`      | Bundle instead of externalize                                                                                                                                                                                                                                 |
+| `publint`    | `true`    | [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint)                                                                                                                                                                                |
+| `attw`       | `true`    | [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) with ESM-only defaults. Needs TypeScript JS API (`typescript@npm:@typescript/typescript6` when using TS 7 / tsgo).                                           |
+| `rsdoctor`   | `false`   | [`@rsdoctor/rspack-plugin`](https://rsdoctor.rs/) on `tools.rspack`. `true` runs when `RSDOCTOR=true`; `'ci-only'` runs when `CI` is set. CI writes `.rsdoctor/report-rsdoctor.html` and `.rsdoctor/rsdoctor-data.json` and does not start the client server. |
+
+Rstack CLI has no separate Rsdoctor entry. Install the plugin and opt in on the Rslib preset:
+
+```bash
+pnpm add -D @rsdoctor/rspack-plugin
+```
+
+```ts
+import { define } from 'rstack';
+import { nodeLib } from '@heyq02/rstack-config/rslib';
+
+define.lib(() =>
+  nodeLib({
+    rsdoctor: true,
+  }),
+);
+```
+
+```bash
+RSDOCTOR=true pnpm exec rs lib
+```
+
+In CI, `rsdoctor: 'ci-only'` (or `rsdoctor: true` with `RSDOCTOR=true`) writes the brief report under `.rsdoctor/` after the build.
 
 ### fmt / test / staged / commitlint
 

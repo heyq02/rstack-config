@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import { mergeRslibConfig, type RslibConfig } from '@rslib/core';
 import {
   pluginAreTheTypesWrong,
@@ -22,6 +23,61 @@ type Entry = NonNullable<NonNullable<RslibConfig['source']>['entry']>;
  * - object: passed to `pluginAreTheTypesWrong()`, with ESM-only `ignoreResolutions` as default
  */
 export type AttwConfig = boolean | 'ci-only' | PluginAreTheTypesWrongOptions;
+
+/**
+ * Options forwarded to [`RsdoctorRspackPlugin`](https://rsdoctor.rs/config/options/options).
+ * Registered on Rslib `tools.rspack.plugins` — there is no separate Rsdoctor config export.
+ */
+export interface RsdoctorPluginOptions {
+  /** Skip the local report server. Set automatically when `CI` is set. */
+  disableClientServer?: boolean;
+  port?: number;
+  output?: {
+    mode?: 'brief' | 'normal';
+    /** Directory for the post-build report. Default `.rsdoctor`. */
+    reportDir?: string;
+    reportCodeType?: 'noModuleSource' | 'noAssetsAndModuleSource' | 'noCode';
+    options?: {
+      type?: ('html' | 'json')[];
+      htmlOptions?: {
+        reportHtmlName?: string;
+        writeDataJson?: boolean;
+      };
+      jsonOptions?: {
+        fileName?: string;
+      };
+    };
+  };
+  /** Other `@rsdoctor/rspack-plugin` options (`features`, `linter`, …). */
+  [key: string]: unknown;
+}
+
+/**
+ * How `lib()` / `nodeLib()` register `@rsdoctor/rspack-plugin`.
+ * - omit / `false`: not registered
+ * - `true`: registered when `RSDOCTOR=true`
+ * - `'ci-only'`: registered when `CI` is set
+ * - object: plugin options, registered when `RSDOCTOR=true`
+ *
+ * When `CI` is set, the plugin writes a brief HTML + JSON report under
+ * `.rsdoctor` and does not start the client server.
+ */
+export type RsdoctorConfig = boolean | 'ci-only' | RsdoctorPluginOptions;
+
+const RSDOCTOR_PACKAGE = '@rsdoctor/rspack-plugin';
+
+export interface RsdoctorRspackPluginInstance {
+  readonly name: string;
+  readonly isRsdoctorPlugin: boolean;
+  options: RsdoctorPluginOptions;
+  apply: (compiler: unknown) => unknown;
+}
+
+type LoadRsdoctor = () => {
+  RsdoctorRspackPlugin: new (
+    options?: RsdoctorPluginOptions,
+  ) => RsdoctorRspackPluginInstance;
+};
 
 export interface LibOptions {
   /**
@@ -52,6 +108,14 @@ export interface LibOptions {
    * - object: passed to `pluginAreTheTypesWrong()`
    */
   attw?: AttwConfig;
+  /**
+   * [Rsdoctor](https://rsdoctor.rs/) on `tools.rspack` via `@rsdoctor/rspack-plugin`.
+   * - omit / `false`: not registered
+   * - `true`: registered when `RSDOCTOR=true`; CI writes `.rsdoctor/report-rsdoctor.html` and `.rsdoctor/rsdoctor-data.json`
+   * - `'ci-only'`: same report when `CI` is set
+   * - object: plugin options, registered when `RSDOCTOR=true`
+   */
+  rsdoctor?: RsdoctorConfig;
 }
 
 /** Default ignoreResolutions for pure ESM libraries (attw profile ≈ esm-only). */
@@ -127,6 +191,163 @@ export function resolveAttwOptions(
   };
 }
 
+function isModuleNotFound(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null || !('code' in error)) {
+    return false;
+  }
+
+  const code = (error as { code?: string }).code;
+  return code === 'MODULE_NOT_FOUND' || code === 'ERR_MODULE_NOT_FOUND';
+}
+
+function rsdoctorEnvEnabled(): boolean {
+  return process.env.RSDOCTOR === 'true';
+}
+
+function shouldEnableRsdoctor(
+  rsdoctor: RsdoctorConfig,
+): rsdoctor is Exclude<RsdoctorConfig, false> {
+  if (rsdoctor === false) {
+    return false;
+  }
+
+  if (rsdoctor === 'ci-only') {
+    return Boolean(process.env.CI);
+  }
+
+  return rsdoctorEnvEnabled();
+}
+
+function ciReportOptions(): ResolvedRsdoctorOptions {
+  return {
+    disableClientServer: true,
+    output: {
+      mode: 'brief',
+      reportDir: '.rsdoctor',
+      reportCodeType: 'noCode',
+      options: {
+        type: ['html', 'json'],
+        htmlOptions: {
+          reportHtmlName: 'report-rsdoctor.html',
+          writeDataJson: false,
+        },
+        jsonOptions: {
+          fileName: 'rsdoctor-data.json',
+        },
+      },
+    },
+  };
+}
+
+function localReportOptions(): ResolvedRsdoctorOptions {
+  return {
+    output: {
+      reportDir: '.rsdoctor',
+    },
+  };
+}
+
+interface ResolvedRsdoctorOptions extends RsdoctorPluginOptions {
+  output: NonNullable<RsdoctorPluginOptions['output']>;
+}
+
+function mergeOutputOptions(
+  baseOutput: ResolvedRsdoctorOptions['output'],
+  customOptions: NonNullable<ResolvedRsdoctorOptions['output']['options']>,
+): NonNullable<ResolvedRsdoctorOptions['output']['options']> {
+  const baseOptions = baseOutput.options;
+
+  return {
+    ...baseOptions,
+    ...customOptions,
+    htmlOptions: {
+      ...(baseOptions ? baseOptions.htmlOptions : {}),
+      ...(customOptions.htmlOptions ? customOptions.htmlOptions : {}),
+    },
+    jsonOptions: {
+      ...(baseOptions ? baseOptions.jsonOptions : {}),
+      ...(customOptions.jsonOptions ? customOptions.jsonOptions : {}),
+    },
+  };
+}
+
+function mergeRsdoctorOptions(
+  base: ResolvedRsdoctorOptions,
+  custom: RsdoctorPluginOptions,
+): ResolvedRsdoctorOptions {
+  if (!custom.output) {
+    return {
+      ...base,
+      ...custom,
+      output: base.output,
+    };
+  }
+
+  const mode =
+    custom.output.mode ??
+    base.output.mode ??
+    (custom.output.options ? 'brief' : 'normal');
+
+  return {
+    ...base,
+    ...custom,
+    output: {
+      ...base.output,
+      ...custom.output,
+      mode,
+      options: custom.output.options
+        ? mergeOutputOptions(base.output, custom.output.options)
+        : base.output.options,
+    },
+  };
+}
+
+function resolveRsdoctorPluginOptions(
+  rsdoctor: Exclude<RsdoctorConfig, false>,
+): ResolvedRsdoctorOptions {
+  const defaults = process.env.CI ? ciReportOptions() : localReportOptions();
+
+  if (rsdoctor === true || rsdoctor === 'ci-only') {
+    return defaults;
+  }
+
+  return mergeRsdoctorOptions(defaults, rsdoctor);
+}
+
+function defaultLoadRsdoctor(): ReturnType<LoadRsdoctor> {
+  const require = createRequire(import.meta.url);
+  return require(RSDOCTOR_PACKAGE) as ReturnType<LoadRsdoctor>;
+}
+
+/**
+ * Resolve the Rsdoctor Rspack plugin for `tools.rspack`, or `false` when disabled.
+ * Exported for tests.
+ */
+export function resolveRsdoctorPlugin(
+  rsdoctor: RsdoctorConfig = false,
+  load: LoadRsdoctor = defaultLoadRsdoctor,
+): RsdoctorRspackPluginInstance | false {
+  if (!shouldEnableRsdoctor(rsdoctor)) {
+    return false;
+  }
+
+  const options = resolveRsdoctorPluginOptions(rsdoctor);
+
+  try {
+    const { RsdoctorRspackPlugin } = load();
+    return new RsdoctorRspackPlugin(options);
+  } catch (error) {
+    if (!isModuleNotFound(error)) {
+      throw error;
+    }
+
+    throw new Error(
+      `Rsdoctor is enabled but \`${RSDOCTOR_PACKAGE}\` is not installed. Add it with \`pnpm add -D ${RSDOCTOR_PACKAGE}\`.`,
+      { cause: error },
+    );
+  }
+}
+
 function resolvePlugins(
   publint: LibOptions['publint'] = true,
   attw: LibOptions['attw'] = true,
@@ -154,10 +375,12 @@ export function lib(
     inlineDeps = [],
     publint = true,
     attw = true,
+    rsdoctor = false,
   }: LibOptions = {},
   overrides: RslibConfig = {},
 ): RslibConfig {
   const resolved = resolveEntry(entry);
+  const rsdoctorPlugin = resolveRsdoctorPlugin(rsdoctor);
 
   return mergeRslibConfig(
     {
@@ -172,6 +395,15 @@ export function lib(
         entry: resolved.entry,
       },
       plugins: resolvePlugins(publint, attw),
+      ...(rsdoctorPlugin
+        ? {
+            tools: {
+              rspack: {
+                plugins: [rsdoctorPlugin],
+              },
+            },
+          }
+        : {}),
       ...(inlineDeps.length > 0
         ? {
             output: {
