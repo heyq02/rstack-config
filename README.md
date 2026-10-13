@@ -152,8 +152,18 @@ pnpm run typecheck
 pnpm run test
 pnpm run format   # automd + rs fmt
 pnpm run check    # rs check + typecheck
-pnpm release      # changelogen: bump, CHANGELOG.md, tag (then push)
+pnpm release      # global bumpp: bump, commit, tag, push
 ```
+
+### Release
+
+```bash
+pnpm release
+```
+
+Uses your globally installed [`bumpp`](https://github.com/antfu-collective/bumpp) to bump, commit, tag, and push. The `v*` tag runs [`.github/workflows/release.yml`](.github/workflows/release.yml) (GitHub Release via [changelogithub](https://github.com/antfu/changelogithub) + npm publish via [sxzz/workflows](https://github.com/sxzz/workflows)). Every push/PR also gets a preview package from [`.github/workflows/release-commit.yml`](.github/workflows/release-commit.yml) (`pkg-pr-new`).
+
+Configure [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers) for this GitHub repo so OIDC publish works without `NPM_TOKEN`.
 
 ## License
 
