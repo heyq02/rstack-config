@@ -1,7 +1,7 @@
 {
   "name": "@heyq02/rstack-config",
   "version": "0.0.3",
-  "description": "Opinionated Rstack CLI presets (lint, lib, fmt, test, staged, commitlint) with tree-shakeable subpath exports and define.extends support.",
+  "description": "Opinionated Rstack CLI presets (lint, lib, fmt, test, staged, commitlint, tsconfig) with tree-shakeable subpath exports and define.extends support.",
   "keywords": [
     "commitlint",
     "conventional-commits",
@@ -18,6 +18,7 @@
     "rstack-config",
     "staged",
     "tree-shaking",
+    "tsconfig",
     "typescript"
   ],
   "homepage": "https://github.com/heyq02/rstack-config#readme",
@@ -57,6 +58,8 @@
       "types": "./dist/commitlint/index.d.ts",
       "default": "./dist/commitlint/index.js"
     },
+    "./tsconfig": "./tsconfigs/tsconfig.json",
+    "./tsconfig.json": "./tsconfigs/tsconfig.json",
     "./rstack": {
       "types": "./dist/rstack/index.d.ts",
       "default": "./dist/rstack/index.js"
@@ -64,7 +67,8 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "tsconfigs"
   ],
   "scripts": {
     "automd": "automd",

@@ -11,7 +11,7 @@ Opinionated [Rstack CLI](https://rstack.rs/) presets — the Rstack counterpart 
 
 ## Features
 
-- Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged` / `commitlint`
+- Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged` / `commitlint` / `tsconfig`
 - Unified `rstack()` → `RstackConfig` for `define.extends([...])`
 - `sideEffects: false` + distinct ESM bundles
 - Optional peers: install only the tools you use
@@ -91,6 +91,34 @@ pnpm exec commitlint --edit "$1"
 
 And `"prepare": "rs hooks"` in `package.json`.
 
+### TypeScript
+
+Shareable `tsconfig` JSON (strict + bundler resolution). Path fields like `include` / `rootDir` stay in the consumer so they resolve against the project root:
+
+```json
+// tsconfig.json
+{
+  "extends": "@heyq02/rstack-config/tsconfig",
+  "compilerOptions": {
+    "rootDir": "src"
+  },
+  "include": ["src"]
+}
+```
+
+Override when needed (tests, extra types, wider `include`):
+
+```json
+{
+  "extends": "@heyq02/rstack-config/tsconfig",
+  "compilerOptions": {
+    "rootDir": ".",
+    "types": ["rstack/types", "node"]
+  },
+  "include": ["src", "tests", "rstack.config.ts"]
+}
+```
+
 ### Community mapping
 
 | Subpath                            | Role                                     | Inspired by             |
@@ -101,6 +129,7 @@ And `"prepare": "rs hooks"` in `package.json`.
 | `@heyq02/rstack-config/test`       | `test()` for `rs test`                   | Rstack-native           |
 | `@heyq02/rstack-config/staged`     | `staged()` for `rs staged`               | Rstack-native           |
 | `@heyq02/rstack-config/commitlint` | `commitlint()` for `@commitlint/cli`     | Conventional Commits    |
+| `@heyq02/rstack-config/tsconfig`   | shareable `tsconfig.json`                | Node library defaults   |
 | `@heyq02/rstack-config/rstack`     | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
 
 There is no root `.` export — pick a subpath.

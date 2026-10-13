@@ -27,8 +27,12 @@ describe('package exports', () => {
       './rstack',
       './staged',
       './test',
+      './tsconfig',
+      './tsconfig.json',
     ]);
     expect('.' in pkg.exports).toBe(false);
+    expect(pkg.exports['./tsconfig']).toBe('./tsconfigs/tsconfig.json');
+    expect(pkg.exports['./tsconfig.json']).toBe('./tsconfigs/tsconfig.json');
     expect(pkg.peerDependenciesMeta?.['@commitlint/cli']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.['@rslint/core']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.['@rslib/core']?.optional).toBe(true);
