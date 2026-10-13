@@ -17,6 +17,8 @@ define.extends([
       },
       publint: true,
       attw: true,
+      // RSDOCTOR=true rs lib — CI writes .rsdoctor and skips the client server.
+      rsdoctor: true,
     },
     lint: {
       typescript: true,

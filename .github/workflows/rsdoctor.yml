@@ -1,0 +1,56 @@
+name: Rsdoctor
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    name: Report from latest main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Worktree from latest main
+        id: worktree
+        run: |
+          git fetch origin main
+          dir="${RUNNER_TEMP}/rsdoctor-main"
+          git worktree add --detach "$dir" origin/main
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.10.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          cache: pnpm
+          cache-dependency-path: ${{ steps.worktree.outputs.dir }}/pnpm-lock.yaml
+
+      - name: Install
+        working-directory: ${{ steps.worktree.outputs.dir }}
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Rsdoctor report
+        working-directory: ${{ steps.worktree.outputs.dir }}
+        env:
+          RSDOCTOR: 'true'
+        run: pnpm run build:rsdoctor
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: rsdoctor-report
+          path: ${{ steps.worktree.outputs.dir }}/.rsdoctor/**
+          if-no-files-found: error
