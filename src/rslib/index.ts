@@ -34,7 +34,10 @@ export interface RsdoctorPluginOptions {
   port?: number;
   output?: {
     mode?: 'brief' | 'normal';
-    /** Directory for the post-build report. Default `.rsdoctor`. */
+    /**
+     * Directory for the post-build report.
+     * Local default `.rsdoctor`. CI default `dist/.rsdoctor`.
+     */
     reportDir?: string;
     reportCodeType?: 'noModuleSource' | 'noAssetsAndModuleSource' | 'noCode';
     options?: {
@@ -59,8 +62,10 @@ export interface RsdoctorPluginOptions {
  * - `'ci-only'`: registered when `CI` is set
  * - object: plugin options, registered when `RSDOCTOR=true`
  *
- * When `CI` is set, the plugin writes a brief HTML + JSON report under
- * `.rsdoctor` and does not start the client server.
+ * When `CI` is set, the plugin writes brief JSON to
+ * `dist/.rsdoctor/rsdoctor-data.json` for
+ * [rsdoctor-action](https://github.com/web-infra-dev/rsdoctor-action)
+ * and does not start the client server.
  */
 export type RsdoctorConfig = boolean | 'ci-only' | RsdoctorPluginOptions;
 
@@ -111,7 +116,7 @@ export interface LibOptions {
   /**
    * [Rsdoctor](https://rsdoctor.rs/) on `tools.rspack` via `@rsdoctor/rspack-plugin`.
    * - omit / `false`: not registered
-   * - `true`: registered when `RSDOCTOR=true`; CI writes `.rsdoctor/report-rsdoctor.html` and `.rsdoctor/rsdoctor-data.json`
+   * - `true`: registered when `RSDOCTOR=true`; CI writes `dist/.rsdoctor/rsdoctor-data.json`
    * - `'ci-only'`: same report when `CI` is set
    * - object: plugin options, registered when `RSDOCTOR=true`
    */
@@ -218,19 +223,19 @@ function shouldEnableRsdoctor(
   return rsdoctorEnvEnabled();
 }
 
+/**
+ * Brief JSON for `web-infra-dev/rsdoctor-action`.
+ * Brief mode writes into `reportDir` itself, so this must be `dist/.rsdoctor`
+ * to match `file_path: dist/.rsdoctor/rsdoctor-data.json`.
+ */
 function ciReportOptions(): ResolvedRsdoctorOptions {
   return {
     disableClientServer: true,
     output: {
       mode: 'brief',
-      reportDir: '.rsdoctor',
-      reportCodeType: 'noCode',
+      reportDir: 'dist/.rsdoctor',
       options: {
-        type: ['html', 'json'],
-        htmlOptions: {
-          reportHtmlName: 'report-rsdoctor.html',
-          writeDataJson: false,
-        },
+        type: ['json'],
         jsonOptions: {
           fileName: 'rsdoctor-data.json',
         },
