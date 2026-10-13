@@ -34,7 +34,6 @@
 - `src/staged/` — `staged()` → `./staged`
 - `src/commitlint/` — `commitlint()` → `./commitlint` (one-liner `commitlint.config.js`)
 - `src/rstack/` — unified `rstack()` for `define.extends` → `./rstack`
-- `ARCHITECTURE.md` — design notes and community mapping
 - No root `.` export — consumers must pick a subpath
 - Self-host: `rstack.config.ts` uses `define.extends([rstack(...)])`; `commitlint.config.js` re-exports `./src/commitlint`
 
@@ -66,6 +65,6 @@ This keeps GitHub Releases (via `changelogithub` on tag push) useful — non-con
 
 ## Cursor Cloud specific instructions
 
-- Cloud Agent setup lives in `.cursor/environment.json` and runs `bash .cursor/install.sh`. That script links Node `22.22.2` ahead of the image Node `22.14` at `/exec-daemon/node`, then runs `pnpm install --frozen-lockfile` (`packageManager` is `pnpm@12.10.1`).
+- Cloud Agent environment is dashboard-managed (not repo-local `.cursor/`). Install should link Node `22.22.2` ahead of older image Node, activate `pnpm@12.10.1`, then `pnpm install --frozen-lockfile`.
 - Rstack loads `rstack.config.ts` through Node's built-in TypeScript stripping, which is on by default in Node `>=22.18`. `rstack` itself requires Node `^22.18.0 || >=24.3.0`.
 - This repo is a library preset, with no dev server to boot. `pnpm run dev` only rebuilds on file changes. Verify with `pnpm run lint`, `pnpm run test`, `pnpm run typecheck`, `pnpm run build`, and `pnpm run format:check`.
