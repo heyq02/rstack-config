@@ -9,8 +9,6 @@
 
 Opinionated [Rstack CLI](https://rstack.rs/) presets — the Rstack counterpart of the sxzz toolchain split (`@sxzz/eslint-config` + `@sxzz/prettier-config` + `tsdown-preset-sxzz`), with **tree-shakeable subpaths** and a unified `define.extends` entry.
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for the mapping and design notes.
-
 ## Features
 
 - Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged` / `commitlint`
