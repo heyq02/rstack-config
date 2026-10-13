@@ -22,7 +22,9 @@ jobs:
         id: worktree
         run: |
           git fetch origin main
-          dir="${RUNNER_TEMP}/rsdoctor-main"
+          # setup-node resolves cache-dependency-path from the workspace.
+          # A lockfile under RUNNER_TEMP is outside that root and fails the cache step.
+          dir="${GITHUB_WORKSPACE}/.rsdoctor-main"
           git worktree add --detach "$dir" origin/main
           echo "dir=$dir" >> "$GITHUB_OUTPUT"
 
@@ -36,7 +38,7 @@ jobs:
         with:
           node-version: 22.22.2
           cache: pnpm
-          cache-dependency-path: ${{ steps.worktree.outputs.dir }}/pnpm-lock.yaml
+          cache-dependency-path: .rsdoctor-main/pnpm-lock.yaml
 
       - name: Install
         working-directory: ${{ steps.worktree.outputs.dir }}

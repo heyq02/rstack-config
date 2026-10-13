@@ -2,6 +2,7 @@ node_modules
 dist
 coverage
 .rsdoctor
+.rsdoctor-main
 *.tgz
 *.log
 .DS_Store
