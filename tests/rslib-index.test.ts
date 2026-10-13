@@ -342,13 +342,9 @@ test('lib() writes a brief CI report and skips the client server', () => {
     );
     expect(plugin.options.output).toMatchObject({
       mode: 'brief',
-      reportDir: '.rsdoctor',
+      reportDir: 'dist/.rsdoctor',
       options: {
-        type: ['html', 'json'],
-        htmlOptions: {
-          reportHtmlName: 'report-rsdoctor.html',
-          writeDataJson: false,
-        },
+        type: ['json'],
         jsonOptions: {
           fileName: 'rsdoctor-data.json',
         },
@@ -448,8 +444,8 @@ test('rsdoctor object options merge over the report defaults', () => {
       mode: 'brief',
       reportDir: 'custom',
       options: {
-        type: ['html', 'json'],
-        htmlOptions: { reportHtmlName: 'report-rsdoctor.html' },
+        type: ['json'],
+        jsonOptions: { fileName: 'rsdoctor-data.json' },
       },
     });
 
@@ -468,6 +464,7 @@ test('rsdoctor object options merge over the report defaults', () => {
     );
     expect(json.options.disableClientServer).toBe(false);
     expect(json.options.output?.mode).toBe('brief');
+    expect(json.options.output?.reportDir).toBe('dist/.rsdoctor');
     expect(json.options.output?.options).toMatchObject({
       type: ['json'],
       jsonOptions: { fileName: 'data.json' },
