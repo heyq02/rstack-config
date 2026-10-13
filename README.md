@@ -13,7 +13,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the mapping and design notes.
 
 ## Features
 
-- Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged`
+- Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged` / `commitlint`
 - Unified `rstack()` → `RstackConfig` for `define.extends([...])`
 - `sideEffects: false` + distinct ESM bundles
 - Optional peers: install only the tools you use
@@ -23,6 +23,8 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for the mapping and design notes.
 
 ```bash
 pnpm add -D @heyq02/rstack-config rstack @rslint/core @rslib/core
+# Optional — commit message lint (commit-msg hook)
+pnpm add -D @commitlint/cli
 ```
 
 ## Usage
@@ -62,16 +64,46 @@ define.test(test());
 define.staged(staged());
 ```
 
+### Commitlint
+
+Rstack CLI has no `define.commitlint()`, so commit message lint stays a one-liner config file (same shape as [`rspack-plugin-git-revision`](https://github.com/heyq02/rspack-plugin-git-revision)):
+
+```js
+// commitlint.config.js
+export { default } from '@heyq02/rstack-config/commitlint';
+```
+
+With options:
+
+```js
+import { commitlint } from '@heyq02/rstack-config/commitlint';
+
+export default commitlint({
+  headerMaxLength: 100,
+  // types: ['feat', 'fix', ...],
+});
+```
+
+Wire the hook (once per repo):
+
+```sh
+# .rstack/hooks/commit-msg
+pnpm exec commitlint --edit "$1"
+```
+
+And `"prepare": "rs hooks"` in `package.json`.
+
 ### Community mapping
 
-| Subpath                        | Role                                     | Inspired by             |
-| ------------------------------ | ---------------------------------------- | ----------------------- |
-| `@heyq02/rstack-config/rslint` | `lint()` Rslint flat-config              | `@sxzz/eslint-config`   |
-| `@heyq02/rstack-config/fmt`    | `fmt()` for `rs fmt` / `define.fmt`      | `@sxzz/prettier-config` |
-| `@heyq02/rstack-config/rslib`  | `lib()` / `nodeLib()`                    | `tsdown-preset-sxzz`    |
-| `@heyq02/rstack-config/test`   | `test()` for `rs test`                   | Rstack-native           |
-| `@heyq02/rstack-config/staged` | `staged()` for `rs staged`               | Rstack-native           |
-| `@heyq02/rstack-config/rstack` | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
+| Subpath                            | Role                                     | Inspired by             |
+| ---------------------------------- | ---------------------------------------- | ----------------------- |
+| `@heyq02/rstack-config/rslint`     | `lint()` Rslint flat-config              | `@sxzz/eslint-config`   |
+| `@heyq02/rstack-config/fmt`        | `fmt()` for `rs fmt` / `define.fmt`      | `@sxzz/prettier-config` |
+| `@heyq02/rstack-config/rslib`      | `lib()` / `nodeLib()`                    | `tsdown-preset-sxzz`    |
+| `@heyq02/rstack-config/test`       | `test()` for `rs test`                   | Rstack-native           |
+| `@heyq02/rstack-config/staged`     | `staged()` for `rs staged`               | Rstack-native           |
+| `@heyq02/rstack-config/commitlint` | `commitlint()` for `@commitlint/cli`     | Conventional Commits    |
+| `@heyq02/rstack-config/rstack`     | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
 
 There is no root `.` export — pick a subpath.
 
@@ -117,7 +149,7 @@ There is no root `.` export — pick a subpath.
 | `publint`    | `true`    | [`rsbuild-plugin-publint`](https://github.com/rstackjs/rsbuild-plugin-publint)                                                                                                                                      |
 | `attw`       | `true`    | [`rsbuild-plugin-arethetypeswrong`](https://github.com/rstackjs/rsbuild-plugin-arethetypeswrong) with ESM-only defaults. Needs TypeScript JS API (`typescript@npm:@typescript/typescript6` when using TS 7 / tsgo). |
 
-### fmt / test / staged
+### fmt / test / staged / commitlint
 
 ```ts
 fmt({
@@ -127,6 +159,7 @@ fmt({
 });
 test({ strictCoverage: true });
 staged({ formatAll: true, lintFix: true });
+commitlint({ headerMaxLength: 100 });
 ```
 
 ## Migration

@@ -19,6 +19,7 @@ describe('package exports', () => {
     expect(pkg.name).toBe('@heyq02/rstack-config');
     expect(pkg.sideEffects).toBe(false);
     expect(Object.keys(pkg.exports).sort()).toEqual([
+      './commitlint',
       './fmt',
       './package.json',
       './rslib',
@@ -28,6 +29,7 @@ describe('package exports', () => {
       './test',
     ]);
     expect('.' in pkg.exports).toBe(false);
+    expect(pkg.peerDependenciesMeta?.['@commitlint/cli']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.['@rslint/core']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.['@rslib/core']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.rstack?.optional).toBe(true);

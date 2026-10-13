@@ -32,10 +32,11 @@
 - `src/fmt/` — `rs fmt` defaults (sxzz prettier-config analogue) → `./fmt`
 - `src/test/` — `test()` → `./test`
 - `src/staged/` — `staged()` → `./staged`
+- `src/commitlint/` — `commitlint()` → `./commitlint` (one-liner `commitlint.config.js`)
 - `src/rstack/` — unified `rstack()` for `define.extends` → `./rstack`
 - `ARCHITECTURE.md` — design notes and community mapping
 - No root `.` export — consumers must pick a subpath
-- Self-host: `rstack.config.ts` uses `define.extends([rstack(...)])`
+- Self-host: `rstack.config.ts` uses `define.extends([rstack(...)])`; `commitlint.config.js` re-exports `./src/commitlint`
 
 ## Tools
 

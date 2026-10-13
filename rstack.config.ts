@@ -12,6 +12,7 @@ define.extends([
         'fmt/index': './src/fmt/index.ts',
         'test/index': './src/test/index.ts',
         'staged/index': './src/staged/index.ts',
+        'commitlint/index': './src/commitlint/index.ts',
         'rstack/index': './src/rstack/index.ts',
       },
       publint: true,

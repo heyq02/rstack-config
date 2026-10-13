@@ -5,17 +5,18 @@ This package ports the sxzz “unified toolchain preset” pattern onto
 
 ## Community references
 
-| sxzz / ecosystem                                                   | Role                               | Rstack CLI equivalent                        |
-| ------------------------------------------------------------------ | ---------------------------------- | -------------------------------------------- |
-| [`@sxzz/eslint-config`](https://github.com/sxzz/eslint-config)     | Lint factory + layered presets     | `@heyq02/rstack-config/rslint` (`lint()`)    |
-| [`@sxzz/prettier-config`](https://github.com/sxzz/prettier-config) | Shareable format defaults          | `@heyq02/rstack-config/fmt` (`fmt()`)        |
-| [`tsdown-preset-sxzz`](https://github.com/sxzz/tsdown-preset-sxzz) | `lib()` / `nodeLib()` build preset | `@heyq02/rstack-config/rslib`                |
-| _(Rstack-native)_                                                  | Tests / staged hooks               | `./test` (`test()`), `./staged` (`staged()`) |
-| _(Rstack-native)_                                                  | One shared config object           | `@heyq02/rstack-config/rstack` (`rstack()`)  |
+| sxzz / ecosystem                                                                          | Role                               | Rstack CLI equivalent                               |
+| ----------------------------------------------------------------------------------------- | ---------------------------------- | --------------------------------------------------- |
+| [`@sxzz/eslint-config`](https://github.com/sxzz/eslint-config)                            | Lint factory + layered presets     | `@heyq02/rstack-config/rslint` (`lint()`)           |
+| [`@sxzz/prettier-config`](https://github.com/sxzz/prettier-config)                        | Shareable format defaults          | `@heyq02/rstack-config/fmt` (`fmt()`)               |
+| [`tsdown-preset-sxzz`](https://github.com/sxzz/tsdown-preset-sxzz)                        | `lib()` / `nodeLib()` build preset | `@heyq02/rstack-config/rslib`                       |
+| _(Rstack-native)_                                                                         | Tests / staged hooks               | `./test` (`test()`), `./staged` (`staged()`)        |
+| [`@commitlint/config-conventional`](https://github.com/conventional-changelog/commitlint) | Commit message lint                | `@heyq02/rstack-config/commitlint` (`commitlint()`) |
+| _(Rstack-native)_                                                                         | One shared config object           | `@heyq02/rstack-config/rstack` (`rstack()`)         |
 
 ## Design principles (from those packages)
 
-1. **One-line defaults** — `lint()`, `lib()`, `fmt()`, `test()`, `staged()`, `rstack()` work with zero options.
+1. **One-line defaults** — `lint()`, `lib()`, `fmt()`, `test()`, `staged()`, `commitlint()`, `rstack()` work with zero options.
 2. **Composable overrides** — second-arg / options object merges into tool configs.
 3. **Feature auto-detect** — lint toggles follow installed packages (sxzz / antfu style).
 4. **Tree-shakeable subpaths** — no root barrel; import only the tool you need.
@@ -29,9 +30,14 @@ This package ports the sxzz “unified toolchain preset” pattern onto
 @heyq02/rstack-config/rslib   → lib() / nodeLib() (+ publint / attw)
 @heyq02/rstack-config/fmt     → fmt() for define.fmt / rs fmt
 @heyq02/rstack-config/test    → `test()` for define.test / rs test
-@heyq02/rstack-config/staged  → staged() for define.staged / rs staged
-@heyq02/rstack-config/rstack  → rstack() → RstackConfig for define.extends
+@heyq02/rstack-config/staged     → staged() for define.staged / rs staged
+@heyq02/rstack-config/commitlint → commitlint() for @commitlint/cli
+@heyq02/rstack-config/rstack     → rstack() → RstackConfig for define.extends
 ```
+
+> **Note:** Rstack CLI has no `define.commitlint()`. Consumers keep a one-liner
+> `commitlint.config.js` that re-exports `@heyq02/rstack-config/commitlint`
+> (or call `commitlint({ ... })` for overrides).
 
 ## Recommended consumer shapes
 
@@ -69,4 +75,5 @@ define.fmt(fmt());
 
 - Re-exporting Vue / Astro / Markdown lint layers that Rslint does not cover.
 - Shipping a Prettier config file for the Prettier CLI — Rstack owns formatting via `rs fmt`.
+- Wiring commitlint through `rstack()` / `define.extends` — Rstack has no commitlint API; use the `./commitlint` subpath.
 - A root `.` export that aggregates every tool (would defeat subpath tree-shaking).
