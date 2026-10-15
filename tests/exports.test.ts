@@ -28,11 +28,17 @@ describe('package exports', () => {
       './staged',
       './test',
       './tsconfig',
+      './tsconfig.app.json',
       './tsconfig.json',
+      './tsconfig/app',
     ]);
     expect('.' in pkg.exports).toBe(false);
     expect(pkg.exports['./tsconfig']).toBe('./tsconfigs/tsconfig.json');
     expect(pkg.exports['./tsconfig.json']).toBe('./tsconfigs/tsconfig.json');
+    expect(pkg.exports['./tsconfig/app']).toBe('./tsconfigs/tsconfig.app.json');
+    expect(pkg.exports['./tsconfig.app.json']).toBe(
+      './tsconfigs/tsconfig.app.json',
+    );
     expect(pkg.peerDependenciesMeta?.['@commitlint/cli']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.['@rslint/core']?.optional).toBe(true);
     expect(pkg.peerDependenciesMeta?.['@rslib/core']?.optional).toBe(true);

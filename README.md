@@ -11,8 +11,8 @@ Opinionated [Rstack CLI](https://rstack.rs/) presets — the Rstack counterpart 
 
 ## Features
 
-- Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged` / `commitlint` / `tsconfig`
-- Unified `rstack()` → `RstackConfig` for `define.extends([...])`
+- Tool subpaths: `rslint` / `rslib` / `fmt` / `test` / `staged` / `commitlint` / `tsconfig` / `tsconfig/app`
+- Unified `rstack()` → `RstackConfig` for `define.extends([...])`, including Rsbuild sites via `app`
 - `sideEffects: false` + distinct ESM bundles
 - Optional peers: install only the tools you use
 - Lazy factories so `rs lint` does not load the Rslib graph
@@ -44,6 +44,35 @@ define.extends([
 // Optional project overrides (merge on top of the shared preset):
 define.fmt({ printWidth: 100 });
 ```
+
+### Site — Rsbuild (`rs dev` / `rs build` / `rs preview`)
+
+Setting `app` registers `define.app()` and leaves the library build off. Lint keeps Node rules for config files, and turns off `node/no-missing-import` so Rsbuild extensionless imports (`./mount`) are not reported.
+
+```ts
+// rstack.config.ts
+import { define } from 'rstack';
+import { rstack } from '@heyq02/rstack-config/rstack';
+
+define.extends([
+  rstack({
+    app: {
+      source: { entry: { index: './src/index.tsx' } },
+    },
+    lint: { react: true },
+  }),
+]);
+```
+
+```json
+// tsconfig.json
+{
+  "extends": "@heyq02/rstack-config/tsconfig/app",
+  "include": ["src"]
+}
+```
+
+Pass `lib` as well only when the same project should also build a library. Pass `node: false` on `lint` to drop Node rules entirely.
 
 ### Pick tools (maximum tree-shaking)
 
@@ -106,6 +135,20 @@ Shareable `tsconfig` JSON (strict + bundler resolution). Path fields like `inclu
 }
 ```
 
+Browser and Rsbuild sites extend the DOM + JSX config instead (`lib` includes `DOM`, `jsx` is `react-jsx`):
+
+```json
+{
+  "extends": "@heyq02/rstack-config/tsconfig/app",
+  "compilerOptions": {
+    "types": ["@rsbuild/core/types", "node"]
+  },
+  "include": ["src", "rsbuild.config.ts", "rstack.config.ts"]
+}
+```
+
+`./tsconfig.app.json` is the same file.
+
 Override when needed (tests, extra types, wider `include`):
 
 ```json
@@ -121,16 +164,17 @@ Override when needed (tests, extra types, wider `include`):
 
 ### Community mapping
 
-| Subpath                            | Role                                     | Inspired by             |
-| ---------------------------------- | ---------------------------------------- | ----------------------- |
-| `@heyq02/rstack-config/rslint`     | `lint()` Rslint flat-config              | `@sxzz/eslint-config`   |
-| `@heyq02/rstack-config/fmt`        | `fmt()` for `rs fmt` / `define.fmt`      | `@sxzz/prettier-config` |
-| `@heyq02/rstack-config/rslib`      | `lib()` / `nodeLib()`                    | `tsdown-preset-sxzz`    |
-| `@heyq02/rstack-config/test`       | `test()` for `rs test`                   | Rstack-native           |
-| `@heyq02/rstack-config/staged`     | `staged()` for `rs staged`               | Rstack-native           |
-| `@heyq02/rstack-config/commitlint` | `commitlint()` for `@commitlint/cli`     | Conventional Commits    |
-| `@heyq02/rstack-config/tsconfig`   | shareable `tsconfig.json`                | Node library defaults   |
-| `@heyq02/rstack-config/rstack`     | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
+| Subpath                              | Role                                     | Inspired by             |
+| ------------------------------------ | ---------------------------------------- | ----------------------- |
+| `@heyq02/rstack-config/rslint`       | `lint()` Rslint flat-config              | `@sxzz/eslint-config`   |
+| `@heyq02/rstack-config/fmt`          | `fmt()` for `rs fmt` / `define.fmt`      | `@sxzz/prettier-config` |
+| `@heyq02/rstack-config/rslib`        | `lib()` / `nodeLib()`                    | `tsdown-preset-sxzz`    |
+| `@heyq02/rstack-config/test`         | `test()` for `rs test`                   | Rstack-native           |
+| `@heyq02/rstack-config/staged`       | `staged()` for `rs staged`               | Rstack-native           |
+| `@heyq02/rstack-config/commitlint`   | `commitlint()` for `@commitlint/cli`     | Conventional Commits    |
+| `@heyq02/rstack-config/tsconfig`     | shareable `tsconfig.json`                | Node library defaults   |
+| `@heyq02/rstack-config/tsconfig/app` | site `tsconfig` (DOM + JSX)              | Rsbuild / browser       |
+| `@heyq02/rstack-config/rstack`       | `rstack()` → `define.extends` shared cfg | Rstack `define.extends` |
 
 There is no root `.` export — pick a subpath.
 
@@ -138,14 +182,15 @@ There is no root `.` export — pick a subpath.
 
 ### `rstack()`
 
-| Option   | Default                    | Description                     |
-| -------- | -------------------------- | ------------------------------- |
-| `lib`    | `{}`                       | `LibOptions` or `false` to omit |
-| `node`   | `true`                     | Use `nodeLib` instead of `lib`  |
-| `lint`   | Node library lint defaults | `lint` options or `false`       |
-| `fmt`    | `{}`                       | `fmt()` options or `false`      |
-| `test`   | `{}`                       | `test()` options or `false`     |
-| `staged` | `{}`                       | `staged()` options or `false`   |
+| Option   | Default                    | Description                                                                          |
+| -------- | -------------------------- | ------------------------------------------------------------------------------------ |
+| `app`    | omitted                    | Rsbuild options for `define.app()`, or `false`. Setting it defaults `lib` to `false` |
+| `lib`    | `{}`                       | `LibOptions` or `false` to omit. `false` when `app` is set                           |
+| `node`   | `true`                     | Use `nodeLib` instead of `lib`                                                       |
+| `lint`   | Node library lint defaults | `lint` options or `false`. With `app`, `node/no-missing-import` is off               |
+| `fmt`    | `{}`                       | `fmt()` options or `false`                                                           |
+| `test`   | `{}`                       | `test()` options or `false`                                                          |
+| `staged` | `{}`                       | `staged()` options or `false`                                                        |
 
 ### Rslint — `lint()`
 

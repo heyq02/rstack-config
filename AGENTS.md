@@ -34,6 +34,8 @@
 - `src/staged/` — `staged()` → `./staged`
 - `src/commitlint/` — `commitlint()` → `./commitlint` (one-liner `commitlint.config.js`)
 - `tsconfigs/tsconfig.json` — shareable TS config → `./tsconfig` / `./tsconfig.json`
+- `tsconfigs/tsconfig.app.json` — site TS config (DOM + jsx) → `./tsconfig/app` / `./tsconfig.app.json`
+- `src/app/` — `app()` for `define.app()`, loaded lazily by `rstack()`
 - `src/rstack/` — unified `rstack()` for `define.extends` → `./rstack`
 - No root `.` export — consumers must pick a subpath
 - Self-host: `rstack.config.ts` uses `define.extends([rstack(...)])`; `commitlint.config.js` re-exports `./src/commitlint`; root `tsconfig.json` extends `./tsconfigs/tsconfig.json`

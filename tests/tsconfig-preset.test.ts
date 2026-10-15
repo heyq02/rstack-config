@@ -43,6 +43,21 @@ describe('tsconfig preset', () => {
     expect(rootConfig.include).toEqual(['src']);
   });
 
+  it('ships a site tsconfig with DOM lib and jsx', () => {
+    const config = JSON.parse(
+      readFileSync(join(root, 'tsconfigs/tsconfig.app.json'), 'utf8'),
+    ) as {
+      extends: string;
+      compilerOptions: { lib: string[]; jsx: string };
+      include?: string[];
+    };
+
+    expect(config.extends).toBe('./tsconfig.json');
+    expect(config.include).toBeUndefined();
+    expect(config.compilerOptions.lib).toEqual(['DOM', 'ES2022']);
+    expect(config.compilerOptions.jsx).toBe('react-jsx');
+  });
+
   it('publishes tsconfigs/ alongside dist', () => {
     const pkg = JSON.parse(
       readFileSync(join(root, 'package.json'), 'utf8'),
