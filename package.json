@@ -1,6 +1,6 @@
 {
   "name": "@heyq02/rstack-config",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Opinionated Rstack CLI presets (lint, lib, app, fmt, test, staged, commitlint, tsconfig) with tree-shakeable subpath exports and define.extends support.",
   "keywords": [
     "commitlint",
