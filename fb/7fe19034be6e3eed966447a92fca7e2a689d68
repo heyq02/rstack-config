@@ -1,0 +1,35 @@
+AGENTS.md
+  s_ffb50d732dda6f::t_88cba63052ff57 37-38
+README.md
+  s_ffb50d732dda6f::t_0c0ee8c64ab8a2 14-15,48-76,138-151,167-177,185-193
+package.json
+  s_ffb50d732dda6f::t_49edda3639f8c9 4,64-65
+src/app/index.ts
+  s_ffb50d732dda6f::t_12b37074e5acbc 1-31
+src/rstack/index.ts
+  s_ffb50d732dda6f::t_b3bd0e38c8fc13 2,5-8,12-13,15-19,42-67,75,78-79,82-85,93-104,107-108,116-125,127,130,137-141
+tests/exports.test.ts
+  s_ffb50d732dda6f::t_dd025cd3e31462 31,33,38-41
+tests/rstack-preset.test.ts
+  s_ffb50d732dda6f::t_19ac1aece02a62 23,31,39-60,121-209
+tests/tsconfig-preset.test.ts
+  s_ffb50d732dda6f::t_1264547129bc95 46-60
+tsconfigs/tsconfig.app.json
+  s_ffb50d732dda6f::t_187f9b03166de1 1-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "fb7fe19034be6e3eed966447a92fca7e2a689d68",
+  "prompts": {},
+  "sessions": {
+    "s_ffb50d732dda6f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "fcc3531d-30f0-4d04-a30f-bc538bc246b3",
+        "model": "unknown"
+      },
+      "human_author": "heyongqi10 <heyongqi10@jd.com>"
+    }
+  }
+}
